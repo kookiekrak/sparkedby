@@ -25,7 +25,3 @@ aws s3 sync dist/ "s3://$BUCKET_NAME/$CLIENT_NAME/" --delete
 
 echo "Deployment complete! Your landing page is available at:"
 echo "https://$CLIENT_NAME.sparkedby.app/"
-echo "(Once the wildcard CloudFront distribution has been deployed)"
-echo ""
-echo "To test your site, run: npm run deploy:wildcard"
-echo "This only needs to be done once for all client sites."

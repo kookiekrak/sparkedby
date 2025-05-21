@@ -24,10 +24,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
           <div>
-            <h3 
-              className="text-2xl font-bold mb-4 bg-clip-text text-transparent"
-              style={{ background: `linear-gradient(to right, ${import.meta.env.VITE_PRIMARY_COLOR || '#3b82f6'}99, ${import.meta.env.VITE_SECONDARY_COLOR || '#a855f7'}99)` }}
-            >
+            <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400/60 to-purple-400/60 bg-clip-text text-transparent">
               {import.meta.env.VITE_COMPANY_NAME || 'Your Brand'}
             </h3>
             <p className="text-gray-400 mb-4">
@@ -124,7 +121,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} TechLaunch. All rights reserved.
+            &copy; {new Date().getFullYear()} {import.meta.env.VITE_COMPANY_NAME || 'Your Brand'}. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <a href="#" className="text-gray-500 hover:text-white text-sm transition-colors">

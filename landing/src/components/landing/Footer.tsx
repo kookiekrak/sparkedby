@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
           {/* Company Info */}
           <div>
             <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              TechLaunch
+              {import.meta.env.VITE_COMPANY_NAME || 'Your Brand'}
             </h3>
             <p className="text-gray-400 mb-4">
               Empowering startups with innovative technology solutions to scale and succeed in today's competitive market.
@@ -112,7 +112,7 @@ const Footer: React.FC = () => {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} TechLaunch. All rights reserved.
+            &copy; {new Date().getFullYear()} {import.meta.env.VITE_COMPANY_NAME || 'Your Brand'}. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <a href="#" className="text-gray-500 hover:text-white text-sm transition-colors">

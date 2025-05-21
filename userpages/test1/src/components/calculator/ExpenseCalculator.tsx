@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { DollarSign, PlusCircle, Trash2, Calculator } from 'lucide-react';
 
 interface Person {
@@ -34,6 +34,14 @@ const ExpenseCalculator = ({
   const [newPersonName, setNewPersonName] = useState('');
   const [payments, setPayments] = useState<Payment[]>([]);
   const [showSampleData, setShowSampleData] = useState(true);
+  
+  // Use ref to store the callback to prevent it from causing re-renders
+  const onPaymentsCalculatedRef = useRef(onPaymentsCalculated);
+  
+  // Update the ref when the prop changes
+  useEffect(() => {
+    onPaymentsCalculatedRef.current = onPaymentsCalculated;
+  }, [onPaymentsCalculated]);
 
   const addPerson = () => {
     if (newPersonName.trim()) {
@@ -91,13 +99,7 @@ const ExpenseCalculator = ({
   const toggleExpenseShare = (expenseId: string, personId: string) => {
     setExpenses(expenses.map(expense => {
       if (expense.id === expenseId) {
-        // If this is the person who paid, they must always be included in sharing
-        // so we don't allow toggling them off
-        if (personId === expense.paidBy) {
-          return expense;
-        }
-        
-        // Otherwise, toggle as normal
+        // Toggle as normal for all people, including payer
         const sharedWith = expense.sharedWith.includes(personId)
           ? expense.sharedWith.filter(id => id !== personId)
           : [...expense.sharedWith, personId];
@@ -111,8 +113,63 @@ const ExpenseCalculator = ({
     setExpenses(expenses.filter(expense => expense.id !== id));
   };
 
-  const calculatePayments = () => {
-    // Calculate net balances for each person
+  // Removed calculatePayments function since the logic is now directly in useEffect
+
+  const loadSampleData = () => {
+    const samplePeople: Person[] = [
+      { id: '1', name: 'Sara' },
+      { id: '2', name: 'Tian' },
+      { id: '3', name: 'Val' },
+      { id: '4', name: 'Pegah' },
+      { id: '5', name: 'Ben' },
+      { id: '6', name: 'Yifu' },
+      { id: '7', name: 'Tinni' }
+    ];
+    
+    const sampleExpenses: Expense[] = [
+      { 
+        id: '1', 
+        description: 'Friday Dinner - Italian', 
+        amount: 391.97, 
+        paidBy: '1', // Sara paid
+        sharedWith: ['1', '2', '3', '4', '5', '6'] // Sara, Tian, Val, Pegah, Ben, Yifu
+      },
+      { 
+        id: '2', 
+        description: 'Saturday Dinner - Pizza', 
+        amount: 113.33, 
+        paidBy: '1', // Sara paid (although Ben actually paid, Sara will take it off Ben's total)
+        sharedWith: ['1', '2', '3', '4', '5', '6', '7'] // Everyone
+      },
+      { 
+        id: '3', 
+        description: 'Architecture Boat Trip', 
+        amount: 456.12, 
+        paidBy: '1', // Sara paid
+        sharedWith: ['1', '2', '3', '4', '5', '6', '7'] // Everyone
+      },
+      { 
+        id: '4', 
+        description: 'Beyonce', 
+        amount: 220.00, 
+        paidBy: '1', // Sara paid
+        sharedWith: ['7'] // Only Tinni - Sara paid but didn't attend
+      }
+    ];
+    
+    setPeople(samplePeople);
+    setExpenses(sampleExpenses);
+    setShowSampleData(false);
+  };
+
+  // Memoized calculation function
+  const calculatePayments = useCallback(() => {
+    if (expenses.length === 0 || people.length === 0) {
+      setPayments([]);
+      return [];
+    }
+    
+    // Calculate optimized payments logic
     const balances: Record<string, number> = {};
     
     // Initialize balances
@@ -182,58 +239,23 @@ const ExpenseCalculator = ({
       if (creditor.amount < 0.01) creditors.shift();
     }
     
-    setPayments(optimizedPayments);
-  };
-
-  const loadSampleData = () => {
-    const samplePeople: Person[] = [
-      { id: '1', name: 'Sarah' },
-      { id: '2', name: 'Ben' },
-      { id: '3', name: 'Valerie' }
-    ];
-    
-    const sampleExpenses: Expense[] = [
-      { 
-        id: '1', 
-        description: 'Dinner', 
-        amount: 120, 
-        paidBy: '1', 
-        sharedWith: ['1', '2', '3'] 
-      },
-      { 
-        id: '2', 
-        description: 'Uber', 
-        amount: 35, 
-        paidBy: '2', 
-        sharedWith: ['1', '2'] 
-      },
-      { 
-        id: '3', 
-        description: 'Groceries', 
-        amount: 65.50, 
-        paidBy: '3', 
-        sharedWith: ['2', '3'] 
-      }
-    ];
-    
-    setPeople(samplePeople);
-    setExpenses(sampleExpenses);
-    setShowSampleData(false);
-  };
-
-  // Run calculation whenever expenses or people change
+    return optimizedPayments;
+  }, [expenses, people]);
+  
+  // Effect to run calculations and update payments
   useEffect(() => {
-    if (expenses.length > 0 && people.length > 0) {
-      calculatePayments();
-    } else {
-      setPayments([]);
+    const newPayments = calculatePayments();
+    setPayments(newPayments);
+  }, [calculatePayments]);
+  
+  // Separate effect to notify parent component, using the ref to avoid dependency issues
+  useEffect(() => {
+    // Only notify when we have actual payments to report
+    if (onPaymentsCalculatedRef.current) {
+      onPaymentsCalculatedRef.current(payments, people, expenses);
     }
-    
-    // Notify parent component if provided
-    if (onPaymentsCalculated) {
-      onPaymentsCalculated(payments, [...people], [...expenses]);
-    }
-  }, [expenses, people, payments, onPaymentsCalculated]);
+  }, [payments, people, expenses]);
+  
 
   const getPersonNameById = (id: string): string => {
     return people.find(p => p.id === id)?.name || '';
@@ -373,29 +395,29 @@ const ExpenseCalculator = ({
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Split with</label>
                   <div className="flex flex-wrap gap-2">
-                    {/* Person who paid for the expense */}
-                    <div className="px-3 py-1 rounded-full text-sm bg-blue-500 text-white flex items-center gap-1">
-                      <span>{getPersonNameById(expense.paidBy)}</span>
-                      <span className="text-xs">(paid)</span>
-                    </div>
-                    
-                    {/* People who might share the expense (excluding payer) */}
-                    {people
-                      .filter(person => person.id !== expense.paidBy)
-                      .map(person => (
+                    {/* All people, including the payer */}
+                    {people.map(person => {
+                      const isPayer = person.id === expense.paidBy;
+                      const isSharing = expense.sharedWith.includes(person.id);
+                      
+                      return (
                         <div
                           key={person.id}
                           onClick={() => toggleExpenseShare(expense.id, person.id)}
                           className={`
-                            cursor-pointer px-3 py-1 rounded-full text-sm transition-colors
-                            ${expense.sharedWith.includes(person.id) 
-                              ? 'bg-teal-500 text-white' 
-                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+                            cursor-pointer px-3 py-1 rounded-full text-sm transition-colors flex items-center gap-1
+                            ${isSharing
+                              ? isPayer 
+                                ? 'bg-blue-500 text-white' // Blue for payer who is sharing
+                                : 'bg-teal-500 text-white' // Teal for non-payer who is sharing 
+                              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'} // Gray for not sharing
                           `}
                         >
-                          {person.name}
+                          <span>{person.name}</span>
+                          {isPayer && <span className="text-xs">(paid)</span>}
                         </div>
-                      ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>

@@ -327,26 +327,30 @@ const PaymentVisualization = ({ payments, people, expenses }: PaymentVisualizati
           How FriendSplit Optimizes Your Payments
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           <div>
             <h4 className="font-medium text-gray-700 mb-2">Before Optimization:</h4>
             <div className="bg-white p-3 rounded shadow-sm">
               <p className="text-sm text-gray-600 mb-2">
                 Without optimization, each expense creates separate transactions:
               </p>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {calculateRawTransactions().map((transaction, index) => (
-                  <div 
-                    key={index} 
-                    className="text-xs p-1.5 bg-gray-50 border border-gray-100 rounded flex justify-between items-center"
-                  >
-                    <span className="font-medium">{people.find(p => p.id === transaction.from)?.name}</span>
-                    <span className="text-gray-400 mx-1">pays</span>
-                    <span className="font-medium">{people.find(p => p.id === transaction.to)?.name}</span>
-                    <span className="text-blue-500 font-semibold ml-1">${transaction.amount.toFixed(2)}</span>
-                    <span className="text-gray-400 ml-2 italic">({transaction.description})</span>
-                  </div>
-                ))}
+              <div className="space-y-1">
+                {calculateRawTransactions().map((transaction, index) => {
+                  const fromPerson = people.find(p => p.id === transaction.from)?.name;
+                  const toPerson = people.find(p => p.id === transaction.to)?.name;
+                  return (
+                    <div 
+                      key={index} 
+                      className="p-1.5 bg-gray-50 border border-gray-100 rounded grid grid-cols-12 gap-1 text-sm"
+                    >
+                      <span className="font-medium col-span-2">{fromPerson}</span>
+                      <span className="text-gray-400 col-span-1 text-center">pays</span>
+                      <span className="font-medium col-span-2">{toPerson}</span>
+                      <span className="text-blue-500 font-semibold col-span-2 text-right">${transaction.amount.toFixed(2)}</span>
+                      <span className="text-gray-400 col-span-5 italic truncate">({transaction.description})</span>
+                    </div>
+                  );
+                })}
               </div>
               <div className="mt-3 bg-red-50 p-2 rounded-lg text-sm">
                 <span className="font-medium text-red-600">Problem:</span> {calculateRawTransactions().length} separate transactions!
@@ -360,22 +364,20 @@ const PaymentVisualization = ({ payments, people, expenses }: PaymentVisualizati
               <p className="text-sm text-gray-600 mb-2">
                 FriendSplit calculates net balances and creates the minimum number of transactions:
               </p>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {payments.map((payment, index) => {
-                  const fromPerson = people.find(p => p.id === payment.from);
-                  const toPerson = people.find(p => p.id === payment.to);
+                  const fromPerson = people.find(p => p.id === payment.from)?.name;
+                  const toPerson = people.find(p => p.id === payment.to)?.name;
                   return (
                     <div 
                       key={index} 
-                      className="text-sm p-2 bg-teal-50 border border-teal-100 rounded flex justify-between items-center"
+                      className="p-2 bg-teal-50 border border-teal-100 rounded grid grid-cols-12 gap-1 text-sm"
                     >
-                      <span className="font-medium">{fromPerson?.name}</span>
-                      <div className="flex items-center gap-1 text-teal-600">
-                        <span>pays</span>
-                        <span className="font-bold">${payment.amount.toFixed(2)}</span>
-                        <span>to</span>
-                      </div>
-                      <span className="font-medium">{toPerson?.name}</span>
+                      <span className="font-medium col-span-3">{fromPerson}</span>
+                      <span className="text-gray-500 col-span-1 text-center">pays</span>
+                      <span className="text-teal-600 font-bold col-span-2 text-right">${payment.amount.toFixed(2)}</span>
+                      <span className="text-gray-500 col-span-1 text-center">to</span>
+                      <span className="font-medium col-span-5">{toPerson}</span>
                     </div>
                   );
                 })}

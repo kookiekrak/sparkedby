@@ -3,7 +3,6 @@ import './App.css'
 // Import landing page components
 import Navbar from './components/landing/Navbar'
 import Hero from './components/landing/Hero'
-import Features from './components/landing/Features'
 import EmailSignup from './components/landing/EmailSignup'
 import Footer from './components/landing/Footer'
 
@@ -13,7 +12,6 @@ function App() {
       <Navbar />
       <main className="flex-grow">
         <Hero />
-        {/* <Features /> */}
         <EmailSignup />
       </main>
       <Footer />
