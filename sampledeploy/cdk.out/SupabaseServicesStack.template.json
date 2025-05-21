@@ -1,0 +1,3101 @@
+{
+ "Resources": {
+  "SupabaseCertificate2E339463": {
+   "Type": "AWS::CertificateManager::Certificate",
+   "Properties": {
+    "DomainName": "supabase.eastmedical.ai",
+    "DomainValidationOptions": [
+     {
+      "DomainName": "supabase.eastmedical.ai",
+      "HostedZoneId": "Z055778020D8NH7RP81J5"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SupabaseServicesStack/SupabaseCertificate"
+     }
+    ],
+    "ValidationMethod": "DNS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseCertificate/Resource"
+   }
+  },
+  "SupabaseServiceSGF39DA778": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for Supabase ECS services",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpc96F0F6140AE947C7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseServiceSG/Resource"
+   }
+  },
+  "SupabaseServiceSGfromSupabaseServicesStackSupabaseServiceSGC43B9CF1ALLPORTS86613543": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Allow internal communication between Supabase services",
+    "FromPort": 0,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "ToPort": 65535
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:ALL PORTS"
+   }
+  },
+  "SupabaseServiceSGfromSupabaseServicesStackSupabaseLbSGC4F683FB809D5BD391": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Allow load balancer to connect to services",
+    "FromPort": 80,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "SupabaseLbSG67458248",
+      "GroupId"
+     ]
+    },
+    "ToPort": 80
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseLbSGC4F683FB:80"
+   }
+  },
+  "SupabaseServiceSGfromSupabaseServicesStackSupabaseLbSGC4F683FB8001FD618969": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Allow load balancer to connect to Kong admin API for health checks",
+    "FromPort": 8001,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "SupabaseLbSG67458248",
+      "GroupId"
+     ]
+    },
+    "ToPort": 8001
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseLbSGC4F683FB:8001"
+   }
+  },
+  "SupabaseServiceSGfromSupabaseServicesStackSupabaseServiceSGC43B9CF16432FDDCE0A3": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Allow explicit access to PgBouncer",
+    "FromPort": 6432,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "ToPort": 6432
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:6432"
+   }
+  },
+  "SupabaseServiceSGfromSupabaseServicesStackSupabaseServiceSGC43B9CF15432033958E7": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Allow access to main Postgres port",
+    "FromPort": 5432,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "ToPort": 5432
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:5432"
+   }
+  },
+  "SupabaseServiceSGfromSupabaseServicesStackSupabaseServiceSGC43B9CF16543BEF85EA4": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Allow access to transaction pooling port",
+    "FromPort": 6543,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "ToPort": 6543
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:6543"
+   }
+  },
+  "SupabaseServiceSGfromSupabaseServicesStackSupabaseLbSGC4F683FB8000378B05B7": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Load balancer to target",
+    "FromPort": 8000,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "SupabaseLbSG67458248",
+      "GroupId"
+     ]
+    },
+    "ToPort": 8000
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseLbSGC4F683FB:8000"
+   }
+  },
+  "SupabaseLbSG67458248": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for Supabase load balancer",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 443",
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     },
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow from anyone on port 80",
+      "FromPort": 80,
+      "IpProtocol": "tcp",
+      "ToPort": 80
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpc96F0F6140AE947C7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseLbSG/Resource"
+   }
+  },
+  "ImportedDbSecurityGroupfromSupabaseServicesStackSupabaseServiceSGC43B9CF15432B7D356F0": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Allow Supabase services to connect to PostgreSQL",
+    "FromPort": 5432,
+    "GroupId": {
+     "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabaseDbSGF87AE160GroupIdA7BB6970"
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "SupabaseServiceSGF39DA778",
+      "GroupId"
+     ]
+    },
+    "ToPort": 5432
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/ImportedDbSecurityGroup/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:5432"
+   }
+  },
+  "SupabaseCluster6B350E35": {
+   "Type": "AWS::ECS::Cluster",
+   "Properties": {
+    "ClusterSettings": [
+     {
+      "Name": "containerInsights",
+      "Value": "enabled"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseCluster/Resource"
+   }
+  },
+  "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77": {
+   "Type": "AWS::ServiceDiscovery::PrivateDnsNamespace",
+   "Properties": {
+    "Name": "supabase.local",
+    "Vpc": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpc96F0F6140AE947C7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseCluster/DefaultServiceDiscoveryNamespace/Resource"
+   }
+  },
+  "SupabaseTaskExecutionRole0E31FB5D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseTaskExecutionRole/Resource"
+   }
+  },
+  "SupabaseTaskExecutionRoleDefaultPolicyC0F00D50": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+       }
+      },
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+       }
+      },
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+       }
+      },
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+       }
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SupabasePoolerTaskDefSupabasePoolerLogGroup64515FB5",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SupabaseKongTaskDefSupabaseKongLogGroup7340D297",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SupabaseGotrueTaskDefSupabaseGotrueLogGroup40A13AAA",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SupabasePostgrestTaskDefSupabasePostgrestLogGroup80BDB325",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SupabaseRealtimeTaskDefSupabaseRealtimeLogGroup07E7B687",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SupabaseMetaTaskDefSupabaseMetaLogGroup973B9A17",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SupabaseStudioTaskDefSupabaseStudioLogGroup5DDDC40B",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "SupabaseTaskExecutionRoleDefaultPolicyC0F00D50",
+    "Roles": [
+     {
+      "Ref": "SupabaseTaskExecutionRole0E31FB5D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseTaskExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "SupabaseTaskRoleFF032C96": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseTaskRole/Resource"
+   }
+  },
+  "SupabaseALB4990A1B5": {
+   "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+   "Properties": {
+    "LoadBalancerAttributes": [
+     {
+      "Key": "deletion_protection.enabled",
+      "Value": "false"
+     }
+    ],
+    "Scheme": "internet-facing",
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "SupabaseLbSG67458248",
+       "GroupId"
+      ]
+     }
+    ],
+    "Subnets": [
+     {
+      "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcpublicSubnet1Subnet8B290348F6FC1372"
+     },
+     {
+      "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcpublicSubnet2SubnetE497BB00B8DAA4FE"
+     }
+    ],
+    "Type": "application"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseALB/Resource"
+   }
+  },
+  "SupabaseALBSupabaseHttpsListenerD7C3A153": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "Certificates": [
+     {
+      "CertificateArn": {
+       "Ref": "SupabaseCertificate2E339463"
+      }
+     }
+    ],
+    "DefaultActions": [
+     {
+      "FixedResponseConfig": {
+       "ContentType": "text/plain",
+       "MessageBody": "Not Found",
+       "StatusCode": "404"
+      },
+      "Type": "fixed-response"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "SupabaseALB4990A1B5"
+    },
+    "Port": 443,
+    "Protocol": "HTTPS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseALB/SupabaseHttpsListener/Resource"
+   }
+  },
+  "SupabaseALBSupabaseHttpsListenerSupabaseKongTargetRule43533AA9": {
+   "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+   "Properties": {
+    "Actions": [
+     {
+      "TargetGroupArn": {
+       "Ref": "SupabaseKongTargetGroup392AE762"
+      },
+      "Type": "forward"
+     }
+    ],
+    "Conditions": [
+     {
+      "Field": "host-header",
+      "HostHeaderConfig": {
+       "Values": [
+        "supabase.eastmedical.ai"
+       ]
+      }
+     }
+    ],
+    "ListenerArn": {
+     "Ref": "SupabaseALBSupabaseHttpsListenerD7C3A153"
+    },
+    "Priority": 10
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseALB/SupabaseHttpsListener/SupabaseKongTargetRule/Resource"
+   }
+  },
+  "SupabaseALBSupabaseHttpListener8A24F474": {
+   "Type": "AWS::ElasticLoadBalancingV2::Listener",
+   "Properties": {
+    "DefaultActions": [
+     {
+      "RedirectConfig": {
+       "Port": "443",
+       "Protocol": "HTTPS",
+       "StatusCode": "HTTP_301"
+      },
+      "Type": "redirect"
+     }
+    ],
+    "LoadBalancerArn": {
+     "Ref": "SupabaseALB4990A1B5"
+    },
+    "Port": 80,
+    "Protocol": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseALB/SupabaseHttpListener/Resource"
+   }
+  },
+  "SupabasePoolerTaskDefE67358D3": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+        }
+       },
+       {
+        "Name": "POSTGRES_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "POSTGRES_DB",
+        "Value": "postgres"
+       },
+       {
+        "Name": "REGION",
+        "Value": "local"
+       },
+       {
+        "Name": "SUPABASE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "SITE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "ADDITIONAL_REDIRECT_URLS",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "API_EXTERNAL_URL",
+        "Value": "https://api.eastmedical.ai"
+       },
+       {
+        "Name": "PORT",
+        "Value": "4000"
+       },
+       {
+        "Name": "POSTGRES_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "CLUSTER_POSTGRES",
+        "Value": "true"
+       },
+       {
+        "Name": "ERL_AFLAGS",
+        "Value": "-proto_dist inet_tcp"
+       },
+       {
+        "Name": "POOLER_TENANT_ID",
+        "Value": "default"
+       },
+       {
+        "Name": "POOLER_DEFAULT_POOL_SIZE",
+        "Value": "15"
+       },
+       {
+        "Name": "POOLER_MAX_CLIENT_CONN",
+        "Value": "600"
+       },
+       {
+        "Name": "POOLER_POOL_MODE",
+        "Value": "transaction"
+       },
+       {
+        "Name": "DATABASE_URL",
+        "Value": {
+         "Fn::Join": [
+          "",
+          [
+           "ecto://supabase_admin:SupabaseDbStack/SupabaseDbPassword@",
+           {
+            "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+           },
+           ":5432/_supabase"
+          ]
+         ]
+        }
+       },
+       {
+        "Name": "ERL_MAX_PORTS",
+        "Value": "1048576"
+       },
+       {
+        "Name": "EVENTS_QUEUE_SIZE",
+        "Value": "100000"
+       },
+       {
+        "Name": "EVENTS_QUEUE_POLL_INTERVAL",
+        "Value": "100"
+       },
+       {
+        "Name": "EVENTS_QUEUE_POLL_TIMEOUT",
+        "Value": "100"
+       },
+       {
+        "Name": "SUBSCRIPTION_SYNC_INTERVAL",
+        "Value": "60000"
+       },
+       {
+        "Name": "ENABLE_TELEMETRY",
+        "Value": "false"
+       },
+       {
+        "Name": "ENABLE_DASHBOARD",
+        "Value": "true"
+       },
+       {
+        "Name": "DASHBOARD_PORT",
+        "Value": "4000"
+       },
+       {
+        "Name": "METRICS_BEARER_TOKEN",
+        "Value": "OVERRIDE_ME"
+       },
+       {
+        "Name": "SKIP_LIMITS_SCRIPT",
+        "Value": "true"
+       }
+      ],
+      "Essential": true,
+      "HealthCheck": {
+       "Command": [
+        "CMD-SHELL",
+        "curl -sSfL --head -o /dev/null http://127.0.0.1:4000/api/health || exit 1"
+       ],
+       "Interval": 10,
+       "Retries": 5,
+       "StartPeriod": 120,
+       "Timeout": 5
+      },
+      "Image": "public.ecr.aws/supabase/supavisor:2.4.14",
+      "LinuxParameters": {
+       "Capabilities": {},
+       "InitProcessEnabled": true
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SupabasePoolerTaskDefSupabasePoolerLogGroup64515FB5"
+        },
+        "awslogs-stream-prefix": "supabase-pooler",
+        "awslogs-region": "us-east-2"
+       }
+      },
+      "Name": "SupabasePooler",
+      "PortMappings": [
+       {
+        "ContainerPort": 5432,
+        "Protocol": "tcp"
+       },
+       {
+        "ContainerPort": 6543,
+        "Protocol": "tcp"
+       },
+       {
+        "ContainerPort": 4000,
+        "Protocol": "tcp"
+       }
+      ],
+      "Secrets": [
+       {
+        "Name": "POSTGRES_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "API_JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "SECRET_KEY_BASE",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "VAULT_ENC_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "METRICS_JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskExecutionRole0E31FB5D",
+      "Arn"
+     ]
+    },
+    "Family": "SupabaseServicesStackSupabasePoolerTaskDefF16A3973",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskRoleFF032C96",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabasePoolerTaskDef/Resource"
+   }
+  },
+  "SupabasePoolerTaskDefSupabasePoolerLogGroup64515FB5": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabasePoolerTaskDef/SupabasePooler/LogGroup/Resource"
+   }
+  },
+  "SupabasePoolerService02591873": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "CapacityProviderStrategy": [
+     {
+      "CapacityProvider": "FARGATE",
+      "Weight": 1
+     }
+    ],
+    "Cluster": {
+     "Ref": "SupabaseCluster6B350E35"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 300,
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "SupabaseServiceSGF39DA778",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+       },
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+       }
+      ]
+     }
+    },
+    "PlatformVersion": "LATEST",
+    "ServiceRegistries": [
+     {
+      "RegistryArn": {
+       "Fn::GetAtt": [
+        "SupabasePoolerServiceCloudmapService953A502F",
+        "Arn"
+       ]
+      }
+     }
+    ],
+    "TaskDefinition": {
+     "Ref": "SupabasePoolerTaskDefE67358D3"
+    }
+   },
+   "DependsOn": [
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabasePoolerService/Service"
+   }
+  },
+  "SupabasePoolerServiceCloudmapService953A502F": {
+   "Type": "AWS::ServiceDiscovery::Service",
+   "Properties": {
+    "DnsConfig": {
+     "DnsRecords": [
+      {
+       "TTL": 10,
+       "Type": "A"
+      }
+     ],
+     "NamespaceId": {
+      "Fn::GetAtt": [
+       "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+       "Id"
+      ]
+     },
+     "RoutingPolicy": "MULTIVALUE"
+    },
+    "HealthCheckCustomConfig": {
+     "FailureThreshold": 1
+    },
+    "Name": "pooler",
+    "NamespaceId": {
+     "Fn::GetAtt": [
+      "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+      "Id"
+     ]
+    }
+   },
+   "DependsOn": [
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabasePoolerService/CloudmapService/Resource"
+   }
+  },
+  "SupabaseKongTaskDefBFA5573E": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+        }
+       },
+       {
+        "Name": "POSTGRES_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "POSTGRES_DB",
+        "Value": "postgres"
+       },
+       {
+        "Name": "REGION",
+        "Value": "us-east-2"
+       },
+       {
+        "Name": "SUPABASE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "SITE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "ADDITIONAL_REDIRECT_URLS",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "API_EXTERNAL_URL",
+        "Value": "https://api.eastmedical.ai"
+       },
+       {
+        "Name": "KONG_DATABASE",
+        "Value": "off"
+       },
+       {
+        "Name": "KONG_DNS_ORDER",
+        "Value": "LAST,A,CNAME"
+       },
+       {
+        "Name": "KONG_PLUGINS",
+        "Value": "request-transformer,cors,key-auth,acl,basic-auth"
+       },
+       {
+        "Name": "KONG_DNS_RESOLVER",
+        "Value": "169.254.169.253"
+       },
+       {
+        "Name": "KONG_PROXY_LISTEN",
+        "Value": "0.0.0.0:8000"
+       },
+       {
+        "Name": "KONG_ADMIN_LISTEN",
+        "Value": "0.0.0.0:8001"
+       },
+       {
+        "Name": "KONG_PROXY_LISTEN_SSL",
+        "Value": "0.0.0.0:8443"
+       },
+       {
+        "Name": "KONG_ADMIN_LISTEN_SSL",
+        "Value": "0.0.0.0:8444"
+       },
+       {
+        "Name": "KONG_NGINX_PROXY_PROXY_BUFFER_SIZE",
+        "Value": "160k"
+       },
+       {
+        "Name": "KONG_NGINX_PROXY_PROXY_BUFFERS",
+        "Value": "64 160k"
+       },
+       {
+        "Name": "SKIP_LIMITS_SCRIPT",
+        "Value": "true"
+       },
+       {
+        "Name": "KONG_DECLARATIVE_CONFIG_STRING",
+        "Value": "{\"_format_version\":\"2.1\",\"_transform\":true,\"services\":[{\"name\":\"health\",\"url\":\"http://127.0.0.1:8001\",\"routes\":[{\"name\":\"health-route\",\"strip_path\":true,\"paths\":[\"/status\",\"/health\"],\"methods\":[\"GET\"]}]},{\"name\":\"auth-v1\",\"url\":\"http://auth.supabase.local:9999/verify\",\"routes\":[{\"name\":\"auth-v1-route\",\"strip_path\":true,\"paths\":[\"/auth/v1/verify\"]}]},{\"name\":\"rest-v1\",\"url\":\"http://rest.supabase.local:3000\",\"routes\":[{\"name\":\"rest-v1-route\",\"strip_path\":true,\"paths\":[\"/rest/v1\"]}]},{\"name\":\"realtime-v1\",\"url\":\"http://realtime.supabase.local:4000/socket\",\"routes\":[{\"name\":\"realtime-v1-route\",\"strip_path\":true,\"paths\":[\"/realtime/v1\"]}]},{\"name\":\"meta-v1\",\"url\":\"http://meta.supabase.local:8080\",\"routes\":[{\"name\":\"meta-v1-route\",\"strip_path\":true,\"paths\":[\"/meta/v1\"]}]}],\"plugins\":[{\"name\":\"cors\",\"config\":{\"origins\":[\"*\"],\"methods\":[\"GET\",\"POST\",\"PUT\",\"PATCH\",\"DELETE\",\"OPTIONS\"],\"headers\":[\"Accept\",\"Accept-Version\",\"Content-Length\",\"Content-MD5\",\"Content-Type\",\"Date\",\"Authorization\"],\"exposed_headers\":[\"Content-Length\",\"Content-Range\"],\"credentials\":true,\"max_age\":3600}}],\"routes\":[]}"
+       }
+      ],
+      "Essential": true,
+      "HealthCheck": {
+       "Command": [
+        "CMD-SHELL",
+        "curl -f -s -S http://localhost:8001/health || exit 1"
+       ],
+       "Interval": 10,
+       "Retries": 5,
+       "StartPeriod": 60,
+       "Timeout": 5
+      },
+      "Image": "public.ecr.aws/supabase/kong:2.8.1",
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SupabaseKongTaskDefSupabaseKongLogGroup7340D297"
+        },
+        "awslogs-stream-prefix": "supabase-kong",
+        "awslogs-region": "us-east-2"
+       }
+      },
+      "Name": "SupabaseKong",
+      "PortMappings": [
+       {
+        "ContainerPort": 8000,
+        "Protocol": "tcp"
+       },
+       {
+        "ContainerPort": 8443,
+        "Protocol": "tcp"
+       },
+       {
+        "ContainerPort": 8001,
+        "Protocol": "tcp"
+       },
+       {
+        "ContainerPort": 8444,
+        "Protocol": "tcp"
+       }
+      ],
+      "Secrets": [
+       {
+        "Name": "POSTGRES_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "ANON_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+        }
+       },
+       {
+        "Name": "SERVICE_ROLE_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+        }
+       }
+      ]
+     }
+    ],
+    "Cpu": "512",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskExecutionRole0E31FB5D",
+      "Arn"
+     ]
+    },
+    "Family": "SupabaseServicesStackSupabaseKongTaskDefF96C99AA",
+    "Memory": "1024",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskRoleFF032C96",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseKongTaskDef/Resource"
+   }
+  },
+  "SupabaseKongTaskDefSupabaseKongLogGroup7340D297": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseKongTaskDef/SupabaseKong/LogGroup/Resource"
+   }
+  },
+  "SupabaseKongService132F4875": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "CapacityProviderStrategy": [
+     {
+      "CapacityProvider": "FARGATE",
+      "Weight": 1
+     }
+    ],
+    "Cluster": {
+     "Ref": "SupabaseCluster6B350E35"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 600,
+    "LoadBalancers": [
+     {
+      "ContainerName": "SupabaseKong",
+      "ContainerPort": 8000,
+      "TargetGroupArn": {
+       "Ref": "SupabaseKongTargetGroup392AE762"
+      }
+     }
+    ],
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "SupabaseServiceSGF39DA778",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+       },
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+       }
+      ]
+     }
+    },
+    "PlatformVersion": "LATEST",
+    "ServiceRegistries": [
+     {
+      "RegistryArn": {
+       "Fn::GetAtt": [
+        "SupabaseKongServiceCloudmapServiceA9BA8508",
+        "Arn"
+       ]
+      }
+     }
+    ],
+    "TaskDefinition": {
+     "Ref": "SupabaseKongTaskDefBFA5573E"
+    }
+   },
+   "DependsOn": [
+    "SupabaseALBSupabaseHttpsListenerSupabaseKongTargetRule43533AA9",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseKongService/Service"
+   }
+  },
+  "SupabaseKongServiceCloudmapServiceA9BA8508": {
+   "Type": "AWS::ServiceDiscovery::Service",
+   "Properties": {
+    "DnsConfig": {
+     "DnsRecords": [
+      {
+       "TTL": 10,
+       "Type": "A"
+      }
+     ],
+     "NamespaceId": {
+      "Fn::GetAtt": [
+       "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+       "Id"
+      ]
+     },
+     "RoutingPolicy": "MULTIVALUE"
+    },
+    "HealthCheckCustomConfig": {
+     "FailureThreshold": 1
+    },
+    "Name": "kong",
+    "NamespaceId": {
+     "Fn::GetAtt": [
+      "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+      "Id"
+     ]
+    }
+   },
+   "DependsOn": [
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseKongService/CloudmapService/Resource"
+   }
+  },
+  "SupabaseKongTargetGroup392AE762": {
+   "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+   "Properties": {
+    "HealthCheckIntervalSeconds": 30,
+    "HealthCheckPath": "/health",
+    "HealthCheckTimeoutSeconds": 10,
+    "HealthyThresholdCount": 2,
+    "Matcher": {
+     "HttpCode": "200-299"
+    },
+    "Port": 8001,
+    "Protocol": "HTTP",
+    "TargetGroupAttributes": [
+     {
+      "Key": "stickiness.enabled",
+      "Value": "false"
+     }
+    ],
+    "TargetType": "ip",
+    "UnhealthyThresholdCount": 5,
+    "VpcId": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpc96F0F6140AE947C7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseKongTargetGroup/Resource"
+   }
+  },
+  "SupabaseGotrueTaskDef2D300A6F": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+        }
+       },
+       {
+        "Name": "POSTGRES_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "POSTGRES_DB",
+        "Value": "postgres"
+       },
+       {
+        "Name": "REGION",
+        "Value": "us-east-2"
+       },
+       {
+        "Name": "SUPABASE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "SITE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "ADDITIONAL_REDIRECT_URLS",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "API_EXTERNAL_URL",
+        "Value": "https://api.eastmedical.ai/auth/v1"
+       },
+       {
+        "Name": "GOTRUE_DB_DRIVER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "GOTRUE_API_HOST",
+        "Value": "0.0.0.0"
+       },
+       {
+        "Name": "GOTRUE_API_PORT",
+        "Value": "9999"
+       },
+       {
+        "Name": "GOTRUE_DB_NAME",
+        "Value": "postgres"
+       },
+       {
+        "Name": "GOTRUE_DB_HOST",
+        "Value": "pooler.supabase.local"
+       },
+       {
+        "Name": "GOTRUE_DB_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "GOTRUE_DB_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "DISABLE_SIGNUP",
+        "Value": "false"
+       },
+       {
+        "Name": "SKIP_LIMITS_SCRIPT",
+        "Value": "true"
+       }
+      ],
+      "Essential": true,
+      "HealthCheck": {
+       "Command": [
+        "CMD-SHELL",
+        "wget --no-verbose --tries=1 --spider http://localhost:9999/health || exit 1"
+       ],
+       "Interval": 30,
+       "Retries": 3,
+       "Timeout": 5
+      },
+      "Image": "public.ecr.aws/supabase/gotrue:v2.169.0",
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SupabaseGotrueTaskDefSupabaseGotrueLogGroup40A13AAA"
+        },
+        "awslogs-stream-prefix": "supabase-gotrue",
+        "awslogs-region": "us-east-2"
+       }
+      },
+      "Name": "SupabaseGotrue",
+      "PortMappings": [
+       {
+        "ContainerPort": 9999,
+        "Protocol": "tcp"
+       }
+      ],
+      "Secrets": [
+       {
+        "Name": "GOTRUE_DB_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "GOTRUE_JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "POSTGRES_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "ANON_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+        }
+       },
+       {
+        "Name": "SERVICE_ROLE_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+        }
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskExecutionRole0E31FB5D",
+      "Arn"
+     ]
+    },
+    "Family": "SupabaseServicesStackSupabaseGotrueTaskDef0CFFC4B2",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskRoleFF032C96",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseGotrueTaskDef/Resource"
+   }
+  },
+  "SupabaseGotrueTaskDefSupabaseGotrueLogGroup40A13AAA": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseGotrueTaskDef/SupabaseGotrue/LogGroup/Resource"
+   }
+  },
+  "SupabaseGotrueService284F1C38": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "CapacityProviderStrategy": [
+     {
+      "CapacityProvider": "FARGATE",
+      "Weight": 1
+     }
+    ],
+    "Cluster": {
+     "Ref": "SupabaseCluster6B350E35"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 300,
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "SupabaseServiceSGF39DA778",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+       },
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+       }
+      ]
+     }
+    },
+    "ServiceRegistries": [
+     {
+      "RegistryArn": {
+       "Fn::GetAtt": [
+        "SupabaseGotrueServiceCloudmapServiceF8604CB7",
+        "Arn"
+       ]
+      }
+     }
+    ],
+    "TaskDefinition": {
+     "Ref": "SupabaseGotrueTaskDef2D300A6F"
+    }
+   },
+   "DependsOn": [
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseGotrueService/Service"
+   }
+  },
+  "SupabaseGotrueServiceCloudmapServiceF8604CB7": {
+   "Type": "AWS::ServiceDiscovery::Service",
+   "Properties": {
+    "DnsConfig": {
+     "DnsRecords": [
+      {
+       "TTL": 10,
+       "Type": "A"
+      }
+     ],
+     "NamespaceId": {
+      "Fn::GetAtt": [
+       "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+       "Id"
+      ]
+     },
+     "RoutingPolicy": "MULTIVALUE"
+    },
+    "HealthCheckCustomConfig": {
+     "FailureThreshold": 1
+    },
+    "Name": "auth",
+    "NamespaceId": {
+     "Fn::GetAtt": [
+      "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+      "Id"
+     ]
+    }
+   },
+   "DependsOn": [
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseGotrueService/CloudmapService/Resource"
+   }
+  },
+  "SupabasePostgrestTaskDefF7085D40": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+        }
+       },
+       {
+        "Name": "POSTGRES_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "POSTGRES_DB",
+        "Value": "postgres"
+       },
+       {
+        "Name": "REGION",
+        "Value": "us-east-2"
+       },
+       {
+        "Name": "SUPABASE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "SITE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "ADDITIONAL_REDIRECT_URLS",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "API_EXTERNAL_URL",
+        "Value": "https://api.eastmedical.ai"
+       },
+       {
+        "Name": "PGRST_DB_URI",
+        "Value": "postgres://postgres:${PGPASSWORD}@pooler.supabase.local:5432/postgres"
+       },
+       {
+        "Name": "PGRST_DB_SCHEMA",
+        "Value": "public"
+       },
+       {
+        "Name": "PGRST_DB_ANON_ROLE",
+        "Value": "anon"
+       },
+       {
+        "Name": "PGRST_DB_USE_LEGACY_GUCS",
+        "Value": "false"
+       },
+       {
+        "Name": "PGRST_SERVER_PORT",
+        "Value": "3000"
+       },
+       {
+        "Name": "SKIP_LIMITS_SCRIPT",
+        "Value": "true"
+       }
+      ],
+      "Essential": true,
+      "HealthCheck": {
+       "Command": [
+        "CMD-SHELL",
+        "curl -f http://localhost:3000/ || exit 1"
+       ],
+       "Interval": 30,
+       "Retries": 3,
+       "Timeout": 5
+      },
+      "Image": "public.ecr.aws/postgrest/postgrest:v12.2.8",
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SupabasePostgrestTaskDefSupabasePostgrestLogGroup80BDB325"
+        },
+        "awslogs-stream-prefix": "supabase-postgrest",
+        "awslogs-region": "us-east-2"
+       }
+      },
+      "Name": "SupabasePostgrest",
+      "PortMappings": [
+       {
+        "ContainerPort": 3000,
+        "Protocol": "tcp"
+       }
+      ],
+      "Secrets": [
+       {
+        "Name": "PGPASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "PGRST_JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "POSTGRES_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "ANON_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+        }
+       },
+       {
+        "Name": "SERVICE_ROLE_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+        }
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskExecutionRole0E31FB5D",
+      "Arn"
+     ]
+    },
+    "Family": "SupabaseServicesStackSupabasePostgrestTaskDef6691B21E",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskRoleFF032C96",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabasePostgrestTaskDef/Resource"
+   }
+  },
+  "SupabasePostgrestTaskDefSupabasePostgrestLogGroup80BDB325": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabasePostgrestTaskDef/SupabasePostgrest/LogGroup/Resource"
+   }
+  },
+  "SupabasePostgrestServiceD9B6553E": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "CapacityProviderStrategy": [
+     {
+      "CapacityProvider": "FARGATE",
+      "Weight": 1
+     }
+    ],
+    "Cluster": {
+     "Ref": "SupabaseCluster6B350E35"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 300,
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "SupabaseServiceSGF39DA778",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+       },
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+       }
+      ]
+     }
+    },
+    "ServiceRegistries": [
+     {
+      "RegistryArn": {
+       "Fn::GetAtt": [
+        "SupabasePostgrestServiceCloudmapServiceB34DCFA8",
+        "Arn"
+       ]
+      }
+     }
+    ],
+    "TaskDefinition": {
+     "Ref": "SupabasePostgrestTaskDefF7085D40"
+    }
+   },
+   "DependsOn": [
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabasePostgrestService/Service"
+   }
+  },
+  "SupabasePostgrestServiceCloudmapServiceB34DCFA8": {
+   "Type": "AWS::ServiceDiscovery::Service",
+   "Properties": {
+    "DnsConfig": {
+     "DnsRecords": [
+      {
+       "TTL": 10,
+       "Type": "A"
+      }
+     ],
+     "NamespaceId": {
+      "Fn::GetAtt": [
+       "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+       "Id"
+      ]
+     },
+     "RoutingPolicy": "MULTIVALUE"
+    },
+    "HealthCheckCustomConfig": {
+     "FailureThreshold": 1
+    },
+    "Name": "rest",
+    "NamespaceId": {
+     "Fn::GetAtt": [
+      "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+      "Id"
+     ]
+    }
+   },
+   "DependsOn": [
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabasePostgrestService/CloudmapService/Resource"
+   }
+  },
+  "SupabaseRealtimeTaskDef61C20B39": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+        }
+       },
+       {
+        "Name": "POSTGRES_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "POSTGRES_DB",
+        "Value": "postgres"
+       },
+       {
+        "Name": "REGION",
+        "Value": "us-east-2"
+       },
+       {
+        "Name": "SUPABASE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "SITE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "ADDITIONAL_REDIRECT_URLS",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "API_EXTERNAL_URL",
+        "Value": "https://api.eastmedical.ai"
+       },
+       {
+        "Name": "PORT",
+        "Value": "4000"
+       },
+       {
+        "Name": "DB_HOST",
+        "Value": "pooler.supabase.local"
+       },
+       {
+        "Name": "DB_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "DB_NAME",
+        "Value": "postgres"
+       },
+       {
+        "Name": "DB_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "DB_SSL",
+        "Value": "false"
+       },
+       {
+        "Name": "SECURE_CHANNELS",
+        "Value": "false"
+       },
+       {
+        "Name": "REPLICATION_MODE",
+        "Value": "RLS"
+       },
+       {
+        "Name": "REPLICATION_POLL_INTERVAL",
+        "Value": "100"
+       },
+       {
+        "Name": "ERL_MAX_PORTS",
+        "Value": "1048576"
+       },
+       {
+        "Name": "EVENTS_QUEUE_SIZE",
+        "Value": "100000"
+       },
+       {
+        "Name": "EVENTS_QUEUE_POLL_INTERVAL",
+        "Value": "100"
+       },
+       {
+        "Name": "EVENTS_QUEUE_POLL_TIMEOUT",
+        "Value": "100"
+       },
+       {
+        "Name": "SUBSCRIPTION_SYNC_INTERVAL",
+        "Value": "60000"
+       },
+       {
+        "Name": "SKIP_LIMITS_SCRIPT",
+        "Value": "true"
+       }
+      ],
+      "Essential": true,
+      "HealthCheck": {
+       "Command": [
+        "CMD-SHELL",
+        "curl -f http://localhost:4000/healthz || exit 1"
+       ],
+       "Interval": 30,
+       "Retries": 3,
+       "Timeout": 5
+      },
+      "Image": "public.ecr.aws/supabase/realtime:v2.34.31",
+      "LinuxParameters": {
+       "Capabilities": {},
+       "InitProcessEnabled": true
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SupabaseRealtimeTaskDefSupabaseRealtimeLogGroup07E7B687"
+        },
+        "awslogs-stream-prefix": "supabase-realtime",
+        "awslogs-region": "us-east-2"
+       }
+      },
+      "Name": "SupabaseRealtime",
+      "PortMappings": [
+       {
+        "ContainerPort": 4000,
+        "Protocol": "tcp"
+       }
+      ],
+      "Secrets": [
+       {
+        "Name": "DB_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "API_JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "POSTGRES_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "ANON_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+        }
+       },
+       {
+        "Name": "SERVICE_ROLE_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+        }
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskExecutionRole0E31FB5D",
+      "Arn"
+     ]
+    },
+    "Family": "SupabaseServicesStackSupabaseRealtimeTaskDef8C5657D9",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskRoleFF032C96",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseRealtimeTaskDef/Resource"
+   }
+  },
+  "SupabaseRealtimeTaskDefSupabaseRealtimeLogGroup07E7B687": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseRealtimeTaskDef/SupabaseRealtime/LogGroup/Resource"
+   }
+  },
+  "SupabaseRealtimeService689C04CD": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "CapacityProviderStrategy": [
+     {
+      "CapacityProvider": "FARGATE",
+      "Weight": 1
+     }
+    ],
+    "Cluster": {
+     "Ref": "SupabaseCluster6B350E35"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 300,
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "SupabaseServiceSGF39DA778",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+       },
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+       }
+      ]
+     }
+    },
+    "ServiceRegistries": [
+     {
+      "RegistryArn": {
+       "Fn::GetAtt": [
+        "SupabaseRealtimeServiceCloudmapServiceE28C95A2",
+        "Arn"
+       ]
+      }
+     }
+    ],
+    "TaskDefinition": {
+     "Ref": "SupabaseRealtimeTaskDef61C20B39"
+    }
+   },
+   "DependsOn": [
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseRealtimeService/Service"
+   }
+  },
+  "SupabaseRealtimeServiceCloudmapServiceE28C95A2": {
+   "Type": "AWS::ServiceDiscovery::Service",
+   "Properties": {
+    "DnsConfig": {
+     "DnsRecords": [
+      {
+       "TTL": 10,
+       "Type": "A"
+      }
+     ],
+     "NamespaceId": {
+      "Fn::GetAtt": [
+       "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+       "Id"
+      ]
+     },
+     "RoutingPolicy": "MULTIVALUE"
+    },
+    "HealthCheckCustomConfig": {
+     "FailureThreshold": 1
+    },
+    "Name": "realtime",
+    "NamespaceId": {
+     "Fn::GetAtt": [
+      "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+      "Id"
+     ]
+    }
+   },
+   "DependsOn": [
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseRealtimeService/CloudmapService/Resource"
+   }
+  },
+  "SupabaseMetaTaskDef621F5592": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+        }
+       },
+       {
+        "Name": "POSTGRES_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "POSTGRES_DB",
+        "Value": "postgres"
+       },
+       {
+        "Name": "REGION",
+        "Value": "us-east-2"
+       },
+       {
+        "Name": "SUPABASE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "SITE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "ADDITIONAL_REDIRECT_URLS",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "API_EXTERNAL_URL",
+        "Value": "https://api.eastmedical.ai"
+       },
+       {
+        "Name": "PG_META_PORT",
+        "Value": "8080"
+       },
+       {
+        "Name": "PG_META_DB_HOST",
+        "Value": "pooler.supabase.local"
+       },
+       {
+        "Name": "PG_META_DB_PORT",
+        "Value": "5432"
+       },
+       {
+        "Name": "PG_META_DB_NAME",
+        "Value": "postgres"
+       },
+       {
+        "Name": "PG_META_DB_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "SKIP_LIMITS_SCRIPT",
+        "Value": "true"
+       }
+      ],
+      "Essential": true,
+      "HealthCheck": {
+       "Command": [
+        "CMD-SHELL",
+        "curl -f http://localhost:8080/health || exit 1"
+       ],
+       "Interval": 30,
+       "Retries": 3,
+       "Timeout": 5
+      },
+      "Image": "public.ecr.aws/supabase/postgres-meta:v0.86.0",
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SupabaseMetaTaskDefSupabaseMetaLogGroup973B9A17"
+        },
+        "awslogs-stream-prefix": "supabase-meta",
+        "awslogs-region": "us-east-2"
+       }
+      },
+      "Name": "SupabaseMeta",
+      "PortMappings": [
+       {
+        "ContainerPort": 8080,
+        "Protocol": "tcp"
+       }
+      ],
+      "Secrets": [
+       {
+        "Name": "PG_META_DB_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "POSTGRES_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "ANON_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+        }
+       },
+       {
+        "Name": "SERVICE_ROLE_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+        }
+       }
+      ]
+     }
+    ],
+    "Cpu": "256",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskExecutionRole0E31FB5D",
+      "Arn"
+     ]
+    },
+    "Family": "SupabaseServicesStackSupabaseMetaTaskDef422DF469",
+    "Memory": "512",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskRoleFF032C96",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseMetaTaskDef/Resource"
+   }
+  },
+  "SupabaseMetaTaskDefSupabaseMetaLogGroup973B9A17": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseMetaTaskDef/SupabaseMeta/LogGroup/Resource"
+   }
+  },
+  "SupabaseMetaService71A8D970": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "CapacityProviderStrategy": [
+     {
+      "CapacityProvider": "FARGATE",
+      "Weight": 1
+     }
+    ],
+    "Cluster": {
+     "Ref": "SupabaseCluster6B350E35"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 300,
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "SupabaseServiceSGF39DA778",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+       },
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+       }
+      ]
+     }
+    },
+    "ServiceRegistries": [
+     {
+      "RegistryArn": {
+       "Fn::GetAtt": [
+        "SupabaseMetaServiceCloudmapService630477A8",
+        "Arn"
+       ]
+      }
+     }
+    ],
+    "TaskDefinition": {
+     "Ref": "SupabaseMetaTaskDef621F5592"
+    }
+   },
+   "DependsOn": [
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseMetaService/Service"
+   }
+  },
+  "SupabaseMetaServiceCloudmapService630477A8": {
+   "Type": "AWS::ServiceDiscovery::Service",
+   "Properties": {
+    "DnsConfig": {
+     "DnsRecords": [
+      {
+       "TTL": 10,
+       "Type": "A"
+      }
+     ],
+     "NamespaceId": {
+      "Fn::GetAtt": [
+       "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+       "Id"
+      ]
+     },
+     "RoutingPolicy": "MULTIVALUE"
+    },
+    "HealthCheckCustomConfig": {
+     "FailureThreshold": 1
+    },
+    "Name": "meta",
+    "NamespaceId": {
+     "Fn::GetAtt": [
+      "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+      "Id"
+     ]
+    }
+   },
+   "DependsOn": [
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseMetaService/CloudmapService/Resource"
+   }
+  },
+  "SupabaseStudioTaskDef1AEFDD97": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "POSTGRES_HOST",
+        "Value": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+        }
+       },
+       {
+        "Name": "POSTGRES_USER",
+        "Value": "postgres"
+       },
+       {
+        "Name": "POSTGRES_DB",
+        "Value": "postgres"
+       },
+       {
+        "Name": "REGION",
+        "Value": "us-east-2"
+       },
+       {
+        "Name": "SUPABASE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "SITE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "ADDITIONAL_REDIRECT_URLS",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "API_EXTERNAL_URL",
+        "Value": "https://api.eastmedical.ai"
+       },
+       {
+        "Name": "STUDIO_PG_META_URL",
+        "Value": "http://meta.supabase.local:8080"
+       },
+       {
+        "Name": "SUPABASE_PUBLIC_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "SUPABASE_RESTURL",
+        "Value": "http://rest.supabase.local:3000"
+       },
+       {
+        "Name": "SUPABASE_REALTIMEURL",
+        "Value": "http://realtime.supabase.local:4000"
+       },
+       {
+        "Name": "SUPABASE_AUTHURL",
+        "Value": "http://auth.supabase.local:9999"
+       },
+       {
+        "Name": "NEXT_PUBLIC_SITE_URL",
+        "Value": "https://supabase.eastmedical.ai"
+       },
+       {
+        "Name": "DEFAULT_ORGANIZATION_NAME",
+        "Value": "Default Organization"
+       },
+       {
+        "Name": "DASHBOARD_USERNAME",
+        "Value": "supabase"
+       },
+       {
+        "Name": "DASHBOARD_PASSWORD",
+        "Value": "supabase_strong_password"
+       },
+       {
+        "Name": "STUDIO_PORT",
+        "Value": "3000"
+       },
+       {
+        "Name": "NODE_OPTIONS",
+        "Value": "--dns-result-order=ipv4first"
+       },
+       {
+        "Name": "DEBUG",
+        "Value": "true"
+       },
+       {
+        "Name": "SKIP_LIMITS_SCRIPT",
+        "Value": "true"
+       }
+      ],
+      "Essential": true,
+      "HealthCheck": {
+       "Command": [
+        "CMD-SHELL",
+        "curl -f http://localhost:3000/ || exit 1"
+       ],
+       "Interval": 120,
+       "Retries": 10,
+       "StartPeriod": 300,
+       "Timeout": 15
+      },
+      "Image": "public.ecr.aws/supabase/studio:20250317-6955350",
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "SupabaseStudioTaskDefSupabaseStudioLogGroup5DDDC40B"
+        },
+        "awslogs-stream-prefix": "supabase-studio",
+        "awslogs-region": "us-east-2"
+       }
+      },
+      "Name": "SupabaseStudio",
+      "PortMappings": [
+       {
+        "ContainerPort": 3000,
+        "Protocol": "tcp"
+       }
+      ],
+      "Secrets": [
+       {
+        "Name": "STUDIO_ANON_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+        }
+       },
+       {
+        "Name": "STUDIO_SERVICE_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+        }
+       },
+       {
+        "Name": "POSTGRES_PASSWORD",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+        }
+       },
+       {
+        "Name": "JWT_SECRET",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+        }
+       },
+       {
+        "Name": "ANON_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+        }
+       },
+       {
+        "Name": "SERVICE_ROLE_KEY",
+        "ValueFrom": {
+         "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+        }
+       }
+      ]
+     }
+    ],
+    "Cpu": "512",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskExecutionRole0E31FB5D",
+      "Arn"
+     ]
+    },
+    "Family": "SupabaseServicesStackSupabaseStudioTaskDef46E3FD74",
+    "Memory": "1024",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "SupabaseTaskRoleFF032C96",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseStudioTaskDef/Resource"
+   }
+  },
+  "SupabaseStudioTaskDefSupabaseStudioLogGroup5DDDC40B": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseStudioTaskDef/SupabaseStudio/LogGroup/Resource"
+   }
+  },
+  "SupabaseStudioService72BC584E": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "CapacityProviderStrategy": [
+     {
+      "CapacityProvider": "FARGATE",
+      "Weight": 1
+     }
+    ],
+    "Cluster": {
+     "Ref": "SupabaseCluster6B350E35"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 50
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "HealthCheckGracePeriodSeconds": 600,
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "SupabaseServiceSGF39DA778",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+       },
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+       }
+      ]
+     }
+    },
+    "PlatformVersion": "LATEST",
+    "ServiceRegistries": [
+     {
+      "RegistryArn": {
+       "Fn::GetAtt": [
+        "SupabaseStudioServiceCloudmapService9E29C4E9",
+        "Arn"
+       ]
+      }
+     }
+    ],
+    "TaskDefinition": {
+     "Ref": "SupabaseStudioTaskDef1AEFDD97"
+    }
+   },
+   "DependsOn": [
+    "SupabaseGotrueServiceCloudmapServiceF8604CB7",
+    "SupabaseGotrueService284F1C38",
+    "SupabaseMetaServiceCloudmapService630477A8",
+    "SupabaseMetaService71A8D970",
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabasePostgrestServiceCloudmapServiceB34DCFA8",
+    "SupabasePostgrestServiceD9B6553E",
+    "SupabaseRealtimeServiceCloudmapServiceE28C95A2",
+    "SupabaseRealtimeService689C04CD",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseStudioService/Service"
+   }
+  },
+  "SupabaseStudioServiceCloudmapService9E29C4E9": {
+   "Type": "AWS::ServiceDiscovery::Service",
+   "Properties": {
+    "DnsConfig": {
+     "DnsRecords": [
+      {
+       "TTL": 10,
+       "Type": "A"
+      }
+     ],
+     "NamespaceId": {
+      "Fn::GetAtt": [
+       "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+       "Id"
+      ]
+     },
+     "RoutingPolicy": "MULTIVALUE"
+    },
+    "HealthCheckCustomConfig": {
+     "FailureThreshold": 1
+    },
+    "Name": "studio",
+    "NamespaceId": {
+     "Fn::GetAtt": [
+      "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77",
+      "Id"
+     ]
+    }
+   },
+   "DependsOn": [
+    "SupabaseGotrueServiceCloudmapServiceF8604CB7",
+    "SupabaseGotrueService284F1C38",
+    "SupabaseMetaServiceCloudmapService630477A8",
+    "SupabaseMetaService71A8D970",
+    "SupabasePoolerServiceCloudmapService953A502F",
+    "SupabasePoolerService02591873",
+    "SupabasePostgrestServiceCloudmapServiceB34DCFA8",
+    "SupabasePostgrestServiceD9B6553E",
+    "SupabaseRealtimeServiceCloudmapServiceE28C95A2",
+    "SupabaseRealtimeService689C04CD",
+    "SupabaseTaskRoleFF032C96"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseStudioService/CloudmapService/Resource"
+   }
+  },
+  "SupabaseDnsRecordCF5C46E4": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::Join": [
+       "",
+       [
+        "dualstack.",
+        {
+         "Fn::GetAtt": [
+          "SupabaseALB4990A1B5",
+          "DNSName"
+         ]
+        }
+       ]
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::GetAtt": [
+       "SupabaseALB4990A1B5",
+       "CanonicalHostedZoneID"
+      ]
+     }
+    },
+    "HostedZoneId": "Z055778020D8NH7RP81J5",
+    "Name": "supabase.eastmedical.ai.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseDnsRecord/Resource"
+   }
+  },
+  "SupabaseDashboard4E7C3C82": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabasePoolerService CPU Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"CPUUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabasePoolerService02591873",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabasePoolerService Memory Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"MemoryUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabasePoolerService02591873",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseKongService CPU Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"CPUUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseKongService132F4875",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":6,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseKongService Memory Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"MemoryUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseKongService132F4875",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseGotrueService CPU Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"CPUUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseGotrueService284F1C38",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":12,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseGotrueService Memory Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"MemoryUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseGotrueService284F1C38",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":18,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabasePostgrestService CPU Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"CPUUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabasePostgrestServiceD9B6553E",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":18,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabasePostgrestService Memory Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"MemoryUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabasePostgrestServiceD9B6553E",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":24,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseRealtimeService CPU Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"CPUUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseRealtimeService689C04CD",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":24,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseRealtimeService Memory Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"MemoryUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseRealtimeService689C04CD",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":30,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseMetaService CPU Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"CPUUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseMetaService71A8D970",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":30,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseMetaService Memory Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"MemoryUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseMetaService71A8D970",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":36,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseStudioService CPU Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"CPUUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseStudioService72BC584E",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":36,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SupabaseStudioService Memory Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"MemoryUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "SupabaseCluster6B350E35"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "SupabaseStudioService72BC584E",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":42,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Database CPU Utilization\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/RDS\",\"CPUUtilization\",\"DBInstanceIdentifier\",\"",
+       {
+        "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabasePostgres0313787B30877F21"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":42,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Database Connections\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/RDS\",\"DatabaseConnections\",\"DBInstanceIdentifier\",\"",
+       {
+        "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabasePostgres0313787B30877F21"
+       },
+       "\"]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":12,\"y\":42,\"properties\":{\"view\":\"timeSeries\",\"title\":\"Database Free Storage Space\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/RDS\",\"FreeStorageSpace\",\"DBInstanceIdentifier\",\"",
+       {
+        "Fn::ImportValue": "SupabaseDb:ExportsOutputRefSupabasePostgres0313787B30877F21"
+       },
+       "\"]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    },
+    "DashboardName": "Supabase-Monitoring"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/SupabaseDashboard/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/31R0W7bMAz8lr4r2uJ2wF67BBsGBF3g9H1gZMZlI0uGSDkLBP37YLnJ3CLYE++OxwNFVXr59UEv7+DEC9McF5b2Ou0EzFHVyD4GgwpO/DsZDEIHMiDYgYMWg06rf5paHdyMZoWm0mmHJgaS84/gYz9a/i/8dG1A5nGYdVrZyIKhJL/B7xBaEHwGPq7xQI6EvBsNHxXvBMhhmGkbcvHPFgJ0KBj4krXDMJDBaZcCs+IJNMTGDxjOOm0DDSC4dvwEHXIP08Qt+VYgQadT7W1RS916S+ZcMgrKCi2wkLEemj1YcIZcO1Q6Pfa9HW9K3m08NN9KbzrLOz73EQu6N88F3+jXcdroHZ/5niG0KNe/mtGsrG9Zp41vr+0Lzir4KPjlXqfHGo0PTXl1QTuUrIz1sTmBmBed1sAvew+T50pyHumvKH2UrJxvUL/yp6Gq9PJBf757ZaJFiE6oQ11P9S+fk27NyQIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseServicesStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "SupabaseURL": {
+   "Description": "Supabase instance URL",
+   "Value": "https://supabase.eastmedical.ai",
+   "Export": {
+    "Name": "SupabaseURL"
+   }
+  },
+  "PgBouncerEndpoint": {
+   "Description": "Connection pooler endpoint (internal)",
+   "Value": "pgbouncer.supabase.local:6432",
+   "Export": {
+    "Name": "SupabasePgBouncerEndpoint"
+   }
+  },
+  "SupabaseNamespace": {
+   "Description": "Service discovery namespace",
+   "Value": "supabase.local",
+   "Export": {
+    "Name": "SupabaseNamespaceName"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

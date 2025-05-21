@@ -1,0 +1,1285 @@
+{
+ "Resources": {
+  "WhisperDLQFCBB4107": {
+   "Type": "AWS::SQS::Queue",
+   "Properties": {
+    "MessageRetentionPeriod": 1209600,
+    "QueueName": "whisperprocessing-whisper-dlq"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperDLQ/Resource"
+   }
+  },
+  "WhisperProcessingQueue902D22B9": {
+   "Type": "AWS::SQS::Queue",
+   "Properties": {
+    "MessageRetentionPeriod": 1209600,
+    "QueueName": "whisperprocessing-whisper-jobs",
+    "RedrivePolicy": {
+     "deadLetterTargetArn": {
+      "Fn::GetAtt": [
+       "WhisperDLQFCBB4107",
+       "Arn"
+      ]
+     },
+     "maxReceiveCount": 3
+    },
+    "VisibilityTimeout": 1800
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperProcessingQueue/Resource"
+   }
+  },
+  "ApiUser54822C88": {
+   "Type": "AWS::IAM::User",
+   "Properties": {
+    "UserName": "whisperprocessing-api-user"
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/ApiUser/Resource"
+   }
+  },
+  "ApiUserAccessKeyE80A6E8B": {
+   "Type": "AWS::IAM::AccessKey",
+   "Properties": {
+    "Serial": 1,
+    "UserName": {
+     "Ref": "ApiUser54822C88"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/ApiUserAccessKey/Resource"
+   }
+  },
+  "ApiUserPolicy5740E403": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "sqs:SendMessage",
+        "sqs:ReceiveMessage",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueUrl",
+        "sqs:GetQueueAttributes"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "WhisperProcessingQueue902D22B9",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:HeadObject",
+        "s3:ListBucket",
+        "s3:PutObjectAcl"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::whisperprocessing-files/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::whisperprocessing-files"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:secretsmanager:us-east-2:302263086944:secret:whisperworker-*",
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":secretsmanager:us-east-2:302263086944:secret:whisperworker"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "ApiUserPolicy5740E403",
+    "Users": [
+     {
+      "Ref": "ApiUser54822C88"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/ApiUserPolicy/Resource"
+   }
+  },
+  "WhisperCluster3B62D340": {
+   "Type": "AWS::ECS::Cluster",
+   "Properties": {
+    "ClusterSettings": [
+     {
+      "Name": "containerInsights",
+      "Value": "enabled"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperCluster/Resource"
+   }
+  },
+  "WhisperServiceLogs54B5DC49": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 7
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperServiceLogs/Resource"
+   }
+  },
+  "WhisperEFSSecurityGroupBB8C0F0D": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for Whisper EFS",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpc96F0F6140AE947C7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperEFSSecurityGroup/Resource"
+   }
+  },
+  "WhisperEFSSecurityGroupfromWhisperProcessingStackWhisperECSSecurityGroupA753763F2049DA9B01A7": {
+   "Type": "AWS::EC2::SecurityGroupIngress",
+   "Properties": {
+    "Description": "Allow NFS traffic from ECS tasks",
+    "FromPort": 2049,
+    "GroupId": {
+     "Fn::GetAtt": [
+      "WhisperEFSSecurityGroupBB8C0F0D",
+      "GroupId"
+     ]
+    },
+    "IpProtocol": "tcp",
+    "SourceSecurityGroupId": {
+     "Fn::GetAtt": [
+      "WhisperECSSecurityGroupA98EC4DF",
+      "GroupId"
+     ]
+    },
+    "ToPort": 2049
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperEFSSecurityGroup/from WhisperProcessingStackWhisperECSSecurityGroupA753763F:2049"
+   }
+  },
+  "WhisperModelCache919B57BB": {
+   "Type": "AWS::EFS::FileSystem",
+   "Properties": {
+    "Encrypted": true,
+    "FileSystemTags": [
+     {
+      "Key": "Name",
+      "Value": "WhisperProcessingStack/WhisperModelCache"
+     }
+    ],
+    "LifecyclePolicies": [
+     {
+      "TransitionToIA": "AFTER_14_DAYS"
+     }
+    ],
+    "PerformanceMode": "generalPurpose",
+    "ThroughputMode": "bursting"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperModelCache/Resource"
+   }
+  },
+  "WhisperModelCacheEfsMountTarget1F008F6F3": {
+   "Type": "AWS::EFS::MountTarget",
+   "Properties": {
+    "FileSystemId": {
+     "Ref": "WhisperModelCache919B57BB"
+    },
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "WhisperEFSSecurityGroupBB8C0F0D",
+       "GroupId"
+      ]
+     }
+    ],
+    "SubnetId": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperModelCache/EfsMountTarget1"
+   }
+  },
+  "WhisperModelCacheEfsMountTarget2B75CF7A9": {
+   "Type": "AWS::EFS::MountTarget",
+   "Properties": {
+    "FileSystemId": {
+     "Ref": "WhisperModelCache919B57BB"
+    },
+    "SecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "WhisperEFSSecurityGroupBB8C0F0D",
+       "GroupId"
+      ]
+     }
+    ],
+    "SubnetId": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperModelCache/EfsMountTarget2"
+   }
+  },
+  "WhisperModelCacheWhisperContainerAccess86365E9F": {
+   "Type": "AWS::EFS::AccessPoint",
+   "Properties": {
+    "AccessPointTags": [
+     {
+      "Key": "Name",
+      "Value": "WhisperProcessingStack/WhisperModelCache/WhisperContainerAccess"
+     }
+    ],
+    "FileSystemId": {
+     "Ref": "WhisperModelCache919B57BB"
+    },
+    "PosixUser": {
+     "Gid": "1000",
+     "Uid": "1000"
+    },
+    "RootDirectory": {
+     "CreationInfo": {
+      "OwnerGid": "1000",
+      "OwnerUid": "1000",
+      "Permissions": "755"
+     },
+     "Path": "/whisper-models"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperModelCache/WhisperContainerAccess/Resource"
+   }
+  },
+  "WhisperECSSecurityGroupA98EC4DF": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for Whisper ECS tasks",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpc96F0F6140AE947C7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperECSSecurityGroup/Resource"
+   }
+  },
+  "WhisperTaskTaskRoleBF6B9E32": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperTask/TaskRole/Resource"
+   }
+  },
+  "WhisperTaskTaskRoleDefaultPolicyBF3F88A7": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "elasticfilesystem:ClientMount",
+        "elasticfilesystem:ClientWrite",
+        "elasticfilesystem:ClientRootAccess",
+        "elasticfilesystem:DescribeMountTargets"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "WhisperModelCache919B57BB",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::whisperprocessing-files/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::whisperprocessing-files"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "sqs:ReceiveMessage",
+        "sqs:ChangeMessageVisibility",
+        "sqs:GetQueueUrl",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "WhisperProcessingQueue902D22B9",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:GetObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging",
+        "s3:Abort*"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::whisperprocessing-files"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::whisperprocessing-files/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":secretsmanager:us-east-2:302263086944:secret:whisperworker-??????"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WhisperTaskTaskRoleDefaultPolicyBF3F88A7",
+    "Roles": [
+     {
+      "Ref": "WhisperTaskTaskRoleBF6B9E32"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperTask/TaskRole/DefaultPolicy/Resource"
+   }
+  },
+  "WhisperTask7067F0D5": {
+   "Type": "AWS::ECS::TaskDefinition",
+   "Properties": {
+    "ContainerDefinitions": [
+     {
+      "Environment": [
+       {
+        "Name": "WHISPER_QUEUE_URL",
+        "Value": {
+         "Ref": "WhisperProcessingQueue902D22B9"
+        }
+       },
+       {
+        "Name": "S3_BUCKET_NAME",
+        "Value": "whisperprocessing-files"
+       },
+       {
+        "Name": "AWS_REGION",
+        "Value": "us-east-2"
+       },
+       {
+        "Name": "ENVIRONMENT",
+        "Value": "production"
+       },
+       {
+        "Name": "MODEL_CACHE_DIR",
+        "Value": "/mnt/models"
+       },
+       {
+        "Name": "AWS_EC2_METADATA_DISABLED",
+        "Value": "true"
+       },
+       {
+        "Name": "AWS_USE_FIPS_ENDPOINT",
+        "Value": "false"
+       },
+       {
+        "Name": "AWS_STS_REGIONAL_ENDPOINTS",
+        "Value": "regional"
+       }
+      ],
+      "Essential": true,
+      "Image": {
+       "Fn::Sub": "302263086944.dkr.ecr.us-east-2.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-302263086944-us-east-2:806712f32eccce919eb5b2129b888a14c40561691f6606e64ac3656a334c548e"
+      },
+      "LogConfiguration": {
+       "LogDriver": "awslogs",
+       "Options": {
+        "awslogs-group": {
+         "Ref": "WhisperServiceLogs54B5DC49"
+        },
+        "awslogs-stream-prefix": "whisper",
+        "awslogs-region": "us-east-2"
+       }
+      },
+      "MountPoints": [
+       {
+        "ContainerPath": "/mnt/models",
+        "ReadOnly": false,
+        "SourceVolume": "model-cache"
+       }
+      ],
+      "Name": "WhisperContainer",
+      "Secrets": [
+       {
+        "Name": "OPENAI_API_KEY",
+        "ValueFrom": {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":secretsmanager:us-east-2:302263086944:secret:whisperworker:OPENAI_API_KEY::"
+          ]
+         ]
+        }
+       },
+       {
+        "Name": "API_TOKEN",
+        "ValueFrom": {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":secretsmanager:us-east-2:302263086944:secret:whisperworker:API_TOKEN::"
+          ]
+         ]
+        }
+       }
+      ]
+     }
+    ],
+    "Cpu": "1024",
+    "ExecutionRoleArn": {
+     "Fn::GetAtt": [
+      "WhisperTaskExecutionRoleED9FB9FB",
+      "Arn"
+     ]
+    },
+    "Family": "WhisperProcessingStackWhisperTask78383C88",
+    "Memory": "2048",
+    "NetworkMode": "awsvpc",
+    "RequiresCompatibilities": [
+     "FARGATE"
+    ],
+    "TaskRoleArn": {
+     "Fn::GetAtt": [
+      "WhisperTaskTaskRoleBF6B9E32",
+      "Arn"
+     ]
+    },
+    "Volumes": [
+     {
+      "EFSVolumeConfiguration": {
+       "AuthorizationConfig": {
+        "AccessPointId": {
+         "Ref": "WhisperModelCacheWhisperContainerAccess86365E9F"
+        },
+        "IAM": "ENABLED"
+       },
+       "FilesystemId": {
+        "Ref": "WhisperModelCache919B57BB"
+       },
+       "RootDirectory": "/",
+       "TransitEncryption": "ENABLED"
+      },
+      "Name": "model-cache"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperTask/Resource"
+   }
+  },
+  "WhisperTaskExecutionRoleED9FB9FB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "ecs-tasks.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperTask/ExecutionRole/Resource"
+   }
+  },
+  "WhisperTaskExecutionRoleDefaultPolicyC86611D3": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "elasticfilesystem:ClientMount",
+        "elasticfilesystem:ClientWrite"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "WhisperModelCache919B57BB",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::whisperprocessing-files/*"
+          ]
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           "arn:",
+           {
+            "Ref": "AWS::Partition"
+           },
+           ":s3:::whisperprocessing-files"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:GetDownloadUrlForLayer",
+        "ecr:BatchGetImage"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":ecr:us-east-2:302263086944:repository/cdk-hnb659fds-container-assets-302263086944-us-east-2"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "ecr:GetAuthorizationToken",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "WhisperServiceLogs54B5DC49",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:",
+          {
+           "Ref": "AWS::Partition"
+          },
+          ":secretsmanager:us-east-2:302263086944:secret:whisperworker-??????"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WhisperTaskExecutionRoleDefaultPolicyC86611D3",
+    "Roles": [
+     {
+      "Ref": "WhisperTaskExecutionRoleED9FB9FB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperTask/ExecutionRole/DefaultPolicy/Resource"
+   }
+  },
+  "WhisperServiceB10F19EC": {
+   "Type": "AWS::ECS::Service",
+   "Properties": {
+    "Cluster": {
+     "Ref": "WhisperCluster3B62D340"
+    },
+    "DeploymentConfiguration": {
+     "Alarms": {
+      "AlarmNames": [],
+      "Enable": false,
+      "Rollback": false
+     },
+     "MaximumPercent": 200,
+     "MinimumHealthyPercent": 0
+    },
+    "DesiredCount": 1,
+    "EnableECSManagedTags": false,
+    "LaunchType": "FARGATE",
+    "NetworkConfiguration": {
+     "AwsvpcConfiguration": {
+      "AssignPublicIp": "DISABLED",
+      "SecurityGroups": [
+       {
+        "Fn::GetAtt": [
+         "WhisperECSSecurityGroupA98EC4DF",
+         "GroupId"
+        ]
+       }
+      ],
+      "Subnets": [
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+       },
+       {
+        "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+       }
+      ]
+     }
+    },
+    "PlatformVersion": "1.4.0",
+    "TaskDefinition": {
+     "Ref": "WhisperTask7067F0D5"
+    }
+   },
+   "DependsOn": [
+    "WhisperModelCacheEfsMountTarget1F008F6F3",
+    "WhisperModelCacheEfsMountTarget2B75CF7A9",
+    "WhisperTaskTaskRoleDefaultPolicyBF3F88A7",
+    "WhisperTaskTaskRoleBF6B9E32"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperService/Service"
+   }
+  },
+  "WhisperServiceTaskCountTargetA01DBDF3": {
+   "Type": "AWS::ApplicationAutoScaling::ScalableTarget",
+   "Properties": {
+    "MaxCapacity": 5,
+    "MinCapacity": 1,
+    "ResourceId": {
+     "Fn::Join": [
+      "",
+      [
+       "service/",
+       {
+        "Ref": "WhisperCluster3B62D340"
+       },
+       "/",
+       {
+        "Fn::GetAtt": [
+         "WhisperServiceB10F19EC",
+         "Name"
+        ]
+       }
+      ]
+     ]
+    },
+    "RoleARN": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":iam::302263086944:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService"
+      ]
+     ]
+    },
+    "ScalableDimension": "ecs:service:DesiredCount",
+    "ServiceNamespace": "ecs"
+   },
+   "DependsOn": [
+    "WhisperModelCacheEfsMountTarget1F008F6F3",
+    "WhisperModelCacheEfsMountTarget2B75CF7A9",
+    "WhisperTaskTaskRoleDefaultPolicyBF3F88A7",
+    "WhisperTaskTaskRoleBF6B9E32"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperService/TaskCount/Target/Resource"
+   }
+  },
+  "WhisperServiceTaskCountTargetQueueMessagesVisibleLowerPolicy47F2F070": {
+   "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+   "Properties": {
+    "PolicyName": "WhisperProcessingStackWhisperServiceTaskCountTargetQueueMessagesVisibleLowerPolicyFCE8FA67",
+    "PolicyType": "StepScaling",
+    "ScalingTargetId": {
+     "Ref": "WhisperServiceTaskCountTargetA01DBDF3"
+    },
+    "StepScalingPolicyConfiguration": {
+     "AdjustmentType": "ChangeInCapacity",
+     "Cooldown": 300,
+     "StepAdjustments": [
+      {
+       "MetricIntervalUpperBound": 0,
+       "ScalingAdjustment": -1
+      }
+     ]
+    }
+   },
+   "DependsOn": [
+    "WhisperModelCacheEfsMountTarget1F008F6F3",
+    "WhisperModelCacheEfsMountTarget2B75CF7A9",
+    "WhisperTaskTaskRoleDefaultPolicyBF3F88A7",
+    "WhisperTaskTaskRoleBF6B9E32"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperService/TaskCount/Target/QueueMessagesVisible/LowerPolicy/Resource"
+   }
+  },
+  "WhisperServiceTaskCountTargetQueueMessagesVisibleLowerAlarm9015F972": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "WhisperServiceTaskCountTargetQueueMessagesVisibleLowerPolicy47F2F070"
+     }
+    ],
+    "AlarmDescription": "Lower threshold scaling alarm",
+    "ComparisonOperator": "LessThanOrEqualToThreshold",
+    "EvaluationPeriods": 1,
+    "Metrics": [
+     {
+      "Expression": "prod",
+      "Id": "expr_1"
+     },
+     {
+      "Id": "prod",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "QueueName",
+          "Value": {
+           "Fn::GetAtt": [
+            "WhisperProcessingQueue902D22B9",
+            "QueueName"
+           ]
+          }
+         }
+        ],
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Namespace": "AWS/SQS"
+       },
+       "Period": 300,
+       "Stat": "Maximum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 5
+   },
+   "DependsOn": [
+    "WhisperModelCacheEfsMountTarget1F008F6F3",
+    "WhisperModelCacheEfsMountTarget2B75CF7A9",
+    "WhisperTaskTaskRoleDefaultPolicyBF3F88A7",
+    "WhisperTaskTaskRoleBF6B9E32"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperService/TaskCount/Target/QueueMessagesVisible/LowerAlarm/Resource"
+   }
+  },
+  "WhisperServiceTaskCountTargetQueueMessagesVisibleUpperPolicyA50E5334": {
+   "Type": "AWS::ApplicationAutoScaling::ScalingPolicy",
+   "Properties": {
+    "PolicyName": "WhisperProcessingStackWhisperServiceTaskCountTargetQueueMessagesVisibleUpperPolicyBCD23780",
+    "PolicyType": "StepScaling",
+    "ScalingTargetId": {
+     "Ref": "WhisperServiceTaskCountTargetA01DBDF3"
+    },
+    "StepScalingPolicyConfiguration": {
+     "AdjustmentType": "ChangeInCapacity",
+     "Cooldown": 300,
+     "StepAdjustments": [
+      {
+       "MetricIntervalLowerBound": 0,
+       "MetricIntervalUpperBound": 10,
+       "ScalingAdjustment": 1
+      },
+      {
+       "MetricIntervalLowerBound": 10,
+       "MetricIntervalUpperBound": 40,
+       "ScalingAdjustment": 2
+      },
+      {
+       "MetricIntervalLowerBound": 40,
+       "ScalingAdjustment": 3
+      }
+     ]
+    }
+   },
+   "DependsOn": [
+    "WhisperModelCacheEfsMountTarget1F008F6F3",
+    "WhisperModelCacheEfsMountTarget2B75CF7A9",
+    "WhisperTaskTaskRoleDefaultPolicyBF3F88A7",
+    "WhisperTaskTaskRoleBF6B9E32"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperService/TaskCount/Target/QueueMessagesVisible/UpperPolicy/Resource"
+   }
+  },
+  "WhisperServiceTaskCountTargetQueueMessagesVisibleUpperAlarm2D3D3049": {
+   "Type": "AWS::CloudWatch::Alarm",
+   "Properties": {
+    "AlarmActions": [
+     {
+      "Ref": "WhisperServiceTaskCountTargetQueueMessagesVisibleUpperPolicyA50E5334"
+     }
+    ],
+    "AlarmDescription": "Upper threshold scaling alarm",
+    "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+    "EvaluationPeriods": 1,
+    "Metrics": [
+     {
+      "Expression": "prod",
+      "Id": "expr_1"
+     },
+     {
+      "Id": "prod",
+      "MetricStat": {
+       "Metric": {
+        "Dimensions": [
+         {
+          "Name": "QueueName",
+          "Value": {
+           "Fn::GetAtt": [
+            "WhisperProcessingQueue902D22B9",
+            "QueueName"
+           ]
+          }
+         }
+        ],
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Namespace": "AWS/SQS"
+       },
+       "Period": 300,
+       "Stat": "Maximum"
+      },
+      "ReturnData": false
+     }
+    ],
+    "Threshold": 10
+   },
+   "DependsOn": [
+    "WhisperModelCacheEfsMountTarget1F008F6F3",
+    "WhisperModelCacheEfsMountTarget2B75CF7A9",
+    "WhisperTaskTaskRoleDefaultPolicyBF3F88A7",
+    "WhisperTaskTaskRoleBF6B9E32"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperService/TaskCount/Target/QueueMessagesVisible/UpperAlarm/Resource"
+   }
+  },
+  "WhisperDashboardBC1AE4A3": {
+   "Type": "AWS::CloudWatch::Dashboard",
+   "Properties": {
+    "DashboardBody": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"widgets\":[{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":0,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"SQS Queue Metrics\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/SQS\",\"ApproximateNumberOfMessagesVisible\",\"QueueName\",\"",
+       {
+        "Fn::GetAtt": [
+         "WhisperProcessingQueue902D22B9",
+         "QueueName"
+        ]
+       },
+       "\",{\"stat\":\"Maximum\"}],[\"AWS/SQS\",\"ApproximateNumberOfMessagesNotVisible\",\"QueueName\",\"",
+       {
+        "Fn::GetAtt": [
+         "WhisperProcessingQueue902D22B9",
+         "QueueName"
+        ]
+       },
+       "\",{\"stat\":\"Maximum\"}]],\"yAxis\":{}}},{\"type\":\"metric\",\"width\":6,\"height\":6,\"x\":6,\"y\":0,\"properties\":{\"view\":\"timeSeries\",\"title\":\"ECS Service Metrics\",\"region\":\"",
+       {
+        "Ref": "AWS::Region"
+       },
+       "\",\"metrics\":[[\"AWS/ECS\",\"CPUUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "WhisperCluster3B62D340"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "WhisperServiceB10F19EC",
+         "Name"
+        ]
+       },
+       "\"],[\"AWS/ECS\",\"MemoryUtilization\",\"ClusterName\",\"",
+       {
+        "Ref": "WhisperCluster3B62D340"
+       },
+       "\",\"ServiceName\",\"",
+       {
+        "Fn::GetAtt": [
+         "WhisperServiceB10F19EC",
+         "Name"
+        ]
+       },
+       "\"]],\"yAxis\":{}}}]}"
+      ]
+     ]
+    },
+    "DashboardName": "whisperprocessing-metrics"
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/WhisperDashboard/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/32RTXMaMQyGf0vuRi00h14JTDqZJtOUTc8ZYcRGWWNvLTkM49n/3rEXQsihJ716LOtzBtPv1zC9wr1M7KabOF5DbhRtZ3Avz1m+wU2yHekNChn5K5B/J0pkFltfxWAYd5D/CMXCqp1bSyI/6VDI2XkMjm1lR7UKriYqdjBkBfLCJdEx1UneYmxR6QmlW9KWPSsHXwI+k+AV2VP8wI5/G4pvbGutk2wsOly7mnYRktfBuNAK5PvQ/ogh9SX4pEtzM8gN2RRZD+/v/wd3vo0kMhjaCuRbdtQcRGlXAi+9h9LAE8aW9Li8x8Bez+urbukiPqMIqcAy2I7i3Q5bmhdS3mBFfRDWEA/1XNj3ji2WTWDSIBYd+xbyefZasfR9SRqlvhmjj6f6QOb2dICLkMFYF9Jmj2pfIM8dxjraKJYoL+uAcVPQuzMMZkUSUhxP8ytpn9TUcRrFln07GB82BK/y5W02g+k1fL16FeZJTF55R7Aa7T+jDu5yxgIAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "WhisperProcessingStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "AccessKeyId": {
+   "Description": "The AWS access key ID for the Vercel deployment",
+   "Value": {
+    "Ref": "ApiUserAccessKeyE80A6E8B"
+   }
+  },
+  "SecretAccessKey": {
+   "Description": "The AWS secret access key for the Vercel deployment",
+   "Value": {
+    "Fn::GetAtt": [
+     "ApiUserAccessKeyE80A6E8B",
+     "SecretAccessKey"
+    ]
+   }
+  },
+  "BucketName": {
+   "Description": "The name of the S3 bucket for audio files",
+   "Value": "whisperprocessing-files"
+  },
+  "ProdQueueUrl": {
+   "Description": "The URL of the production SQS queue for Whisper jobs",
+   "Value": {
+    "Ref": "WhisperProcessingQueue902D22B9"
+   }
+  },
+  "Region": {
+   "Description": "The AWS region where resources are deployed",
+   "Value": "us-east-2"
+  },
+  "EcsClusterName": {
+   "Description": "The name of the ECS cluster",
+   "Value": {
+    "Ref": "WhisperCluster3B62D340"
+   }
+  },
+  "LogGroupName": {
+   "Description": "The name of the CloudWatch log group",
+   "Value": {
+    "Ref": "WhisperServiceLogs54B5DC49"
+   }
+  },
+  "WhisperStackName": {
+   "Description": "The name of the Whisper Processing stack",
+   "Value": "WhisperProcessing",
+   "Export": {
+    "Name": "WhisperProcessingStackName"
+   }
+  },
+  "WhisperaudioBucket": {
+   "Description": "The audioBucket resource from Whisper Processing",
+   "Value": "c84bff880cd99d5cd5a06a30f1246e18b10e9fda4c",
+   "Export": {
+    "Name": "WhisperProcessingaudioBucket"
+   }
+  },
+  "WhisperwhisperQueue": {
+   "Description": "The whisperQueue resource from Whisper Processing",
+   "Value": "c872b6879766937372969b66e9d589a862fe37ba72",
+   "Export": {
+    "Name": "WhisperProcessingwhisperQueue"
+   }
+  },
+  "WhisperapiUser": {
+   "Description": "The apiUser resource from Whisper Processing",
+   "Value": "c8c1bdbc884d62f6f533e8007fa81eeb6faff7c730",
+   "Export": {
+    "Name": "WhisperProcessingapiUser"
+   }
+  },
+  "Whisperservice": {
+   "Description": "The service resource from Whisper Processing",
+   "Value": "c8fe201a5d348e4c1b073db69209bee65ae2167cb1",
+   "Export": {
+    "Name": "WhisperProcessingservice"
+   }
+  },
+  "Whispercluster": {
+   "Description": "The cluster resource from Whisper Processing",
+   "Value": "c8fb414c61a0fa793fcebb4e8f61ba6e2cfffdb3c1",
+   "Export": {
+    "Name": "WhisperProcessingcluster"
+   }
+  },
+  "WhisperlogGroup": {
+   "Description": "The logGroup resource from Whisper Processing",
+   "Value": "c8371f1da7e02d1c710fdf96ef6719f711e8930fd3",
+   "Export": {
+    "Name": "WhisperProcessinglogGroup"
+   }
+  },
+  "WhisperwhisperSecret": {
+   "Description": "The whisperSecret resource from Whisper Processing",
+   "Value": "c84644d2bda21cefc4e1cd06d3379a80722c2a8b94",
+   "Export": {
+    "Name": "WhisperProcessingwhisperSecret"
+   }
+  },
+  "Whispervpc": {
+   "Description": "The vpc resource from Whisper Processing",
+   "Value": "c847e6c642ad17b706d5b0211b885f64acf841e9a5",
+   "Export": {
+    "Name": "WhisperProcessingvpc"
+   }
+  },
+  "ExportsOutputFnGetAttWhisperProcessingQueue902D22B9Arn9F894375": {
+   "Value": {
+    "Fn::GetAtt": [
+     "WhisperProcessingQueue902D22B9",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "WhisperProcessing:ExportsOutputFnGetAttWhisperProcessingQueue902D22B9Arn9F894375"
+   }
+  },
+  "ExportsOutputRefWhisperProcessingQueue902D22B9313A56D8": {
+   "Value": {
+    "Ref": "WhisperProcessingQueue902D22B9"
+   },
+   "Export": {
+    "Name": "WhisperProcessing:ExportsOutputRefWhisperProcessingQueue902D22B9313A56D8"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  whisper-app:
+    env_file:
+      - .env
+    depends_on:
+      localstack:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=development
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - S3_BUCKET_NAME=whisperprocessing-files
+      - WHISPER_QUEUE_URL=http://localstack:4566/000000000000/whisperprocessing-whisper-jobs
+      - WHISPER_QUEUE_URL_DEV=http://localstack:4566/000000000000/whisperprocessing-whisper-jobs
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - API_URL=http://host.docker.internal:3000 

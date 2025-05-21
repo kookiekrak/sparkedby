@@ -1,0 +1,52 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "reset-db": "supabase db reset && yarn supabase:gen-types",
+    "reset-db-remote-debug": "supabase db reset --linked",
+    "migrate-db": "supabase db push && yarn supabase:gen-types",
+    "sync-types": "yarn supabase:gen-types",
+    "supabase:studio": "supabase studio",
+    "supabase:gen-types": "supabase gen types typescript --local > src/types/supabase.ts && cp -r src/types/* ../ui/src/types/ && chmod 644 ../ui/src/types/*",
+    "format": "prettier --write \"src/**/*.{ts,js,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,json}\"",
+    "gen-empty-migration": "touch supabase/migrations/$(date -u +%Y%m%d%H%M%S)_migration.sql",
+    "diff-migration": "supabase migration diff --name $(date -u +%Y%m%d%H%M%S)_migration.sql"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.758.0",
+    "@aws-sdk/client-secrets-manager": "^3.758.0",
+    "@aws-sdk/client-sqs": "^3.758.0",
+    "@aws-sdk/credential-providers": "^3.758.0",
+    "@aws-sdk/s3-presigned-post": "^3.758.0",
+    "@supabase/supabase-js": "^2.49.1",
+    "@types/aws-lambda": "^8.10.147",
+    "@vendia/serverless-express": "^4.12.6",
+    "aws-lambda": "^1.0.7",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.x",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.86.1",
+    "pg": "^8.x"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.x",
+    "@types/express": "^5.0.0",
+    "@types/multer": "1.4.11",
+    "@types/node": "^22.13.9",
+    "@types/pg": "^8.x",
+    "esbuild": "^0.25.1",
+    "prettier": "^3.5.3",
+    "ts-node-dev": "^2.0.x",
+    "typescript": "^5.x"
+  }
+}

@@ -1,0 +1,1577 @@
+{
+ "Resources": {
+  "RegionalCertificate5C8CFF45": {
+   "Type": "AWS::CertificateManager::Certificate",
+   "Properties": {
+    "DomainName": "api.eastmedical.ai",
+    "DomainValidationOptions": [
+     {
+      "DomainName": "api.eastmedical.ai",
+      "HostedZoneId": "Z055778020D8NH7RP81J5"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/RegionalCertificate"
+     }
+    ],
+    "ValidationMethod": "DNS"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/RegionalCertificate/Resource"
+   }
+  },
+  "VpcFlowLogsGroupC5F6A8C5": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 30
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/VpcFlowLogsGroup/Resource"
+   }
+  },
+  "SharedVpc96F0F614": {
+   "Type": "AWS::EC2::VPC",
+   "Properties": {
+    "CidrBlock": "10.0.0.0/16",
+    "EnableDnsHostnames": true,
+    "EnableDnsSupport": true,
+    "InstanceTenancy": "default",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/Resource"
+   }
+  },
+  "SharedVpcpublicSubnet1Subnet8B290348": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-2a",
+    "CidrBlock": "10.0.0.0/24",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet1/Subnet"
+   }
+  },
+  "SharedVpcpublicSubnet1RouteTable02281047": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/publicSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet1/RouteTable"
+   }
+  },
+  "SharedVpcpublicSubnet1RouteTableAssociation7BFDFDFE": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "SharedVpcpublicSubnet1RouteTable02281047"
+    },
+    "SubnetId": {
+     "Ref": "SharedVpcpublicSubnet1Subnet8B290348"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet1/RouteTableAssociation"
+   }
+  },
+  "SharedVpcpublicSubnet1DefaultRoute52DB3CDD": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "SharedVpcIGW869E5885"
+    },
+    "RouteTableId": {
+     "Ref": "SharedVpcpublicSubnet1RouteTable02281047"
+    }
+   },
+   "DependsOn": [
+    "SharedVpcVPCGW9C69B7A5"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet1/DefaultRoute"
+   }
+  },
+  "SharedVpcpublicSubnet1EIP05C300B0": {
+   "Type": "AWS::EC2::EIP",
+   "Properties": {
+    "Domain": "vpc",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/publicSubnet1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet1/EIP"
+   }
+  },
+  "SharedVpcpublicSubnet1NATGatewayE91D769E": {
+   "Type": "AWS::EC2::NatGateway",
+   "Properties": {
+    "AllocationId": {
+     "Fn::GetAtt": [
+      "SharedVpcpublicSubnet1EIP05C300B0",
+      "AllocationId"
+     ]
+    },
+    "SubnetId": {
+     "Ref": "SharedVpcpublicSubnet1Subnet8B290348"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/publicSubnet1"
+     }
+    ]
+   },
+   "DependsOn": [
+    "SharedVpcpublicSubnet1DefaultRoute52DB3CDD",
+    "SharedVpcpublicSubnet1RouteTableAssociation7BFDFDFE"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet1/NATGateway"
+   }
+  },
+  "SharedVpcpublicSubnet2SubnetE497BB00": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-2b",
+    "CidrBlock": "10.0.1.0/24",
+    "MapPublicIpOnLaunch": true,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "public"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Public"
+     },
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet2/Subnet"
+   }
+  },
+  "SharedVpcpublicSubnet2RouteTable7C5D1097": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/publicSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet2/RouteTable"
+   }
+  },
+  "SharedVpcpublicSubnet2RouteTableAssociation50161D4C": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "SharedVpcpublicSubnet2RouteTable7C5D1097"
+    },
+    "SubnetId": {
+     "Ref": "SharedVpcpublicSubnet2SubnetE497BB00"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet2/RouteTableAssociation"
+   }
+  },
+  "SharedVpcpublicSubnet2DefaultRouteDF4DAA30": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "GatewayId": {
+     "Ref": "SharedVpcIGW869E5885"
+    },
+    "RouteTableId": {
+     "Ref": "SharedVpcpublicSubnet2RouteTable7C5D1097"
+    }
+   },
+   "DependsOn": [
+    "SharedVpcVPCGW9C69B7A5"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/publicSubnet2/DefaultRoute"
+   }
+  },
+  "SharedVpcprivateSubnet1Subnet51E913CA": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-2a",
+    "CidrBlock": "10.0.2.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/privateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/privateSubnet1/Subnet"
+   }
+  },
+  "SharedVpcprivateSubnet1RouteTable51D7A30B": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/privateSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/privateSubnet1/RouteTable"
+   }
+  },
+  "SharedVpcprivateSubnet1RouteTableAssociationE44D436F": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "SharedVpcprivateSubnet1RouteTable51D7A30B"
+    },
+    "SubnetId": {
+     "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/privateSubnet1/RouteTableAssociation"
+   }
+  },
+  "SharedVpcprivateSubnet1DefaultRoute87475E84": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "SharedVpcpublicSubnet1NATGatewayE91D769E"
+    },
+    "RouteTableId": {
+     "Ref": "SharedVpcprivateSubnet1RouteTable51D7A30B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/privateSubnet1/DefaultRoute"
+   }
+  },
+  "SharedVpcprivateSubnet2Subnet50406F86": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-2b",
+    "CidrBlock": "10.0.3.0/24",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "private"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Private"
+     },
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/privateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/privateSubnet2/Subnet"
+   }
+  },
+  "SharedVpcprivateSubnet2RouteTable538229F1": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/privateSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/privateSubnet2/RouteTable"
+   }
+  },
+  "SharedVpcprivateSubnet2RouteTableAssociation9C4B4B82": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "SharedVpcprivateSubnet2RouteTable538229F1"
+    },
+    "SubnetId": {
+     "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/privateSubnet2/RouteTableAssociation"
+   }
+  },
+  "SharedVpcprivateSubnet2DefaultRoute261AECCB": {
+   "Type": "AWS::EC2::Route",
+   "Properties": {
+    "DestinationCidrBlock": "0.0.0.0/0",
+    "NatGatewayId": {
+     "Ref": "SharedVpcpublicSubnet1NATGatewayE91D769E"
+    },
+    "RouteTableId": {
+     "Ref": "SharedVpcprivateSubnet2RouteTable538229F1"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/privateSubnet2/DefaultRoute"
+   }
+  },
+  "SharedVpcisolatedSubnet1Subnet0A8AF9AC": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-2a",
+    "CidrBlock": "10.0.4.0/28",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "isolated"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Isolated"
+     },
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/isolatedSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/isolatedSubnet1/Subnet"
+   }
+  },
+  "SharedVpcisolatedSubnet1RouteTable2D80C6D9": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/isolatedSubnet1"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/isolatedSubnet1/RouteTable"
+   }
+  },
+  "SharedVpcisolatedSubnet1RouteTableAssociation2F977BC1": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "SharedVpcisolatedSubnet1RouteTable2D80C6D9"
+    },
+    "SubnetId": {
+     "Ref": "SharedVpcisolatedSubnet1Subnet0A8AF9AC"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/isolatedSubnet1/RouteTableAssociation"
+   }
+  },
+  "SharedVpcisolatedSubnet2SubnetB4E457F8": {
+   "Type": "AWS::EC2::Subnet",
+   "Properties": {
+    "AvailabilityZone": "us-east-2b",
+    "CidrBlock": "10.0.4.16/28",
+    "MapPublicIpOnLaunch": false,
+    "Tags": [
+     {
+      "Key": "aws-cdk:subnet-name",
+      "Value": "isolated"
+     },
+     {
+      "Key": "aws-cdk:subnet-type",
+      "Value": "Isolated"
+     },
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/isolatedSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/isolatedSubnet2/Subnet"
+   }
+  },
+  "SharedVpcisolatedSubnet2RouteTableCEB3B7D3": {
+   "Type": "AWS::EC2::RouteTable",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc/isolatedSubnet2"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/isolatedSubnet2/RouteTable"
+   }
+  },
+  "SharedVpcisolatedSubnet2RouteTableAssociationA435FDDA": {
+   "Type": "AWS::EC2::SubnetRouteTableAssociation",
+   "Properties": {
+    "RouteTableId": {
+     "Ref": "SharedVpcisolatedSubnet2RouteTableCEB3B7D3"
+    },
+    "SubnetId": {
+     "Ref": "SharedVpcisolatedSubnet2SubnetB4E457F8"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/isolatedSubnet2/RouteTableAssociation"
+   }
+  },
+  "SharedVpcIGW869E5885": {
+   "Type": "AWS::EC2::InternetGateway",
+   "Properties": {
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/IGW"
+   }
+  },
+  "SharedVpcVPCGW9C69B7A5": {
+   "Type": "AWS::EC2::VPCGatewayAttachment",
+   "Properties": {
+    "InternetGatewayId": {
+     "Ref": "SharedVpcIGW869E5885"
+    },
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/VPCGW"
+   }
+  },
+  "SharedVpcFlowLogIAMRole993A5F27": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "vpc-flow-logs.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VpcTrafficMonitoring"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/FlowLog/IAMRole/Resource"
+   }
+  },
+  "SharedVpcFlowLogIAMRoleDefaultPolicyAE2F5C34": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "VpcFlowLogsGroupC5F6A8C5",
+         "Arn"
+        ]
+       }
+      },
+      {
+       "Action": "iam:PassRole",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "SharedVpcFlowLogIAMRole993A5F27",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "SharedVpcFlowLogIAMRoleDefaultPolicyAE2F5C34",
+    "Roles": [
+     {
+      "Ref": "SharedVpcFlowLogIAMRole993A5F27"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/FlowLog/IAMRole/DefaultPolicy/Resource"
+   }
+  },
+  "SharedVpcFlowLogBAFD07F9": {
+   "Type": "AWS::EC2::FlowLog",
+   "Properties": {
+    "DeliverLogsPermissionArn": {
+     "Fn::GetAtt": [
+      "SharedVpcFlowLogIAMRole993A5F27",
+      "Arn"
+     ]
+    },
+    "LogDestinationType": "cloud-watch-logs",
+    "LogGroupName": {
+     "Ref": "VpcFlowLogsGroupC5F6A8C5"
+    },
+    "MaxAggregationInterval": 60,
+    "ResourceId": {
+     "Ref": "SharedVpc96F0F614"
+    },
+    "ResourceType": "VPC",
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "VpcTrafficMonitoring"
+     }
+    ],
+    "TrafficType": "ALL"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/FlowLog/FlowLog"
+   }
+  },
+  "SharedVpcS3EndpointA07F723C": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "RouteTableIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1RouteTable51D7A30B"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2RouteTable538229F1"
+     },
+     {
+      "Ref": "SharedVpcpublicSubnet1RouteTable02281047"
+     },
+     {
+      "Ref": "SharedVpcpublicSubnet2RouteTable7C5D1097"
+     },
+     {
+      "Ref": "SharedVpcisolatedSubnet1RouteTable2D80C6D9"
+     },
+     {
+      "Ref": "SharedVpcisolatedSubnet2RouteTableCEB3B7D3"
+     }
+    ],
+    "ServiceName": {
+     "Fn::Join": [
+      "",
+      [
+       "com.amazonaws.",
+       {
+        "Ref": "AWS::Region"
+       },
+       ".s3"
+      ]
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Gateway",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/S3Endpoint/Resource"
+   }
+  },
+  "SharedVpcDynamoEndpoint0345D604": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "RouteTableIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1RouteTable51D7A30B"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2RouteTable538229F1"
+     },
+     {
+      "Ref": "SharedVpcpublicSubnet1RouteTable02281047"
+     },
+     {
+      "Ref": "SharedVpcpublicSubnet2RouteTable7C5D1097"
+     },
+     {
+      "Ref": "SharedVpcisolatedSubnet1RouteTable2D80C6D9"
+     },
+     {
+      "Ref": "SharedVpcisolatedSubnet2RouteTableCEB3B7D3"
+     }
+    ],
+    "ServiceName": {
+     "Fn::Join": [
+      "",
+      [
+       "com.amazonaws.",
+       {
+        "Ref": "AWS::Region"
+       },
+       ".dynamodb"
+      ]
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Gateway",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/DynamoEndpoint/Resource"
+   }
+  },
+  "SharedVpcEcrEndpointSecurityGroup2D339FA4": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SharedInfrastructureStack/SharedVpc/EcrEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "SharedVpc96F0F614",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "SharedVpc96F0F614",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/EcrEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "SharedVpcEcrEndpointEC349307": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SharedVpcEcrEndpointSecurityGroup2D339FA4",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": "com.amazonaws.us-east-2.ecr.api",
+    "SubnetIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/EcrEndpoint/Resource"
+   }
+  },
+  "SharedVpcEcrDockerEndpointSecurityGroup041BC8B5": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SharedInfrastructureStack/SharedVpc/EcrDockerEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "SharedVpc96F0F614",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "SharedVpc96F0F614",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/EcrDockerEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "SharedVpcEcrDockerEndpoint3156011A": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SharedVpcEcrDockerEndpointSecurityGroup041BC8B5",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": "com.amazonaws.us-east-2.ecr.dkr",
+    "SubnetIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/EcrDockerEndpoint/Resource"
+   }
+  },
+  "SharedVpcCloudWatchEndpointSecurityGroupD232AFAD": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SharedInfrastructureStack/SharedVpc/CloudWatchEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "SharedVpc96F0F614",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "SharedVpc96F0F614",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/CloudWatchEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "SharedVpcCloudWatchEndpoint6DFEABA0": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SharedVpcCloudWatchEndpointSecurityGroupD232AFAD",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": "com.amazonaws.us-east-2.monitoring",
+    "SubnetIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/CloudWatchEndpoint/Resource"
+   }
+  },
+  "SharedVpcCloudWatchLogsEndpointSecurityGroup9AFCD3A4": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SharedInfrastructureStack/SharedVpc/CloudWatchLogsEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "SharedVpc96F0F614",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "SharedVpc96F0F614",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/CloudWatchLogsEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "SharedVpcCloudWatchLogsEndpoint1D67EB6F": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SharedVpcCloudWatchLogsEndpointSecurityGroup9AFCD3A4",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": "com.amazonaws.us-east-2.logs",
+    "SubnetIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/CloudWatchLogsEndpoint/Resource"
+   }
+  },
+  "SharedVpcSecretsManagerEndpointSecurityGroup0AA9D055": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SharedInfrastructureStack/SharedVpc/SecretsManagerEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "SharedVpc96F0F614",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "SharedVpc96F0F614",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/SecretsManagerEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "SharedVpcSecretsManagerEndpoint70017CEB": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SharedVpcSecretsManagerEndpointSecurityGroup0AA9D055",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": "com.amazonaws.us-east-2.secretsmanager",
+    "SubnetIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/SecretsManagerEndpoint/Resource"
+   }
+  },
+  "SharedVpcSQSEndpointSecurityGroup85D97BCC": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SharedInfrastructureStack/SharedVpc/SQSEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "SharedVpc96F0F614",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "SharedVpc96F0F614",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/SQSEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "SharedVpcSQSEndpoint82CF44F4": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SharedVpcSQSEndpointSecurityGroup85D97BCC",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": "com.amazonaws.us-east-2.sqs",
+    "SubnetIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/SQSEndpoint/Resource"
+   }
+  },
+  "SharedVpcSSMEndpointSecurityGroup8DF232A7": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SharedInfrastructureStack/SharedVpc/SSMEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "SharedVpc96F0F614",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "SharedVpc96F0F614",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/SSMEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "SharedVpcSSMEndpointF2FB644F": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SharedVpcSSMEndpointSecurityGroup8DF232A7",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": "com.amazonaws.us-east-2.ssm",
+    "SubnetIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/SSMEndpoint/Resource"
+   }
+  },
+  "SharedVpcSSMMessagesEndpointSecurityGroup93607E3A": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "SharedInfrastructureStack/SharedVpc/SSMMessagesEndpoint/SecurityGroup",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::GetAtt": [
+        "SharedVpc96F0F614",
+        "CidrBlock"
+       ]
+      },
+      "Description": {
+       "Fn::Join": [
+        "",
+        [
+         "from ",
+         {
+          "Fn::GetAtt": [
+           "SharedVpc96F0F614",
+           "CidrBlock"
+          ]
+         },
+         ":443"
+        ]
+       ]
+      },
+      "FromPort": 443,
+      "IpProtocol": "tcp",
+      "ToPort": 443
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/SSMMessagesEndpoint/SecurityGroup/Resource"
+   }
+  },
+  "SharedVpcSSMMessagesEndpointCF0D16F5": {
+   "Type": "AWS::EC2::VPCEndpoint",
+   "Properties": {
+    "PrivateDnsEnabled": true,
+    "SecurityGroupIds": [
+     {
+      "Fn::GetAtt": [
+       "SharedVpcSSMMessagesEndpointSecurityGroup93607E3A",
+       "GroupId"
+      ]
+     }
+    ],
+    "ServiceName": "com.amazonaws.us-east-2.ssmmessages",
+    "SubnetIds": [
+     {
+      "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+     },
+     {
+      "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "SharedInfrastructureStack/SharedVpc"
+     }
+    ],
+    "VpcEndpointType": "Interface",
+    "VpcId": {
+     "Ref": "SharedVpc96F0F614"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedVpc/SSMMessagesEndpoint/Resource"
+   }
+  },
+  "SharedCloudFrontOAC": {
+   "Type": "AWS::CloudFront::OriginAccessControl",
+   "Properties": {
+    "OriginAccessControlConfig": {
+     "Name": "SharedInfrastructure-SharedOAC-1743025243137",
+     "OriginAccessControlOriginType": "s3",
+     "SigningBehavior": "always",
+     "SigningProtocol": "sigv4"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/SharedCloudFrontOAC"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WQQW/CMAyFfwv3kI2Kw66oYggJjapMXKfgup2hjavEoUJV//tUCi07+b3PL5adSC8+lnoxM42fQ3aZl3TS7UEMXFSKnoMDVKbxPy2gE8oJjGBlrCnQ6TaemIpz+2I7VXLhdbvjYuM41H37qTuFEOn2WENPj0msknAqCQ7hZFF6NqmUg+C3OZU48YmtvGcgI8R2DPdivU368mVkYwQbc1OJo6sRnAZvraCzOAaGTR5uJWLgt0Ir6rPkZsdF33/KR+hYw9pmNZOVx+vR3ofnBvA1c0AIjuQ2/sc/0CkylW5THi6914RLgvtqg+oUlByy3LEVHed276gguwJA72O24rjs+vQ+SB2kU5Yz1Gf/do0ivVjq99nZE81dsEIV6nSof6pRtsEBAgAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SharedInfrastructureStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "VpcId": {
+   "Description": "The ID of the shared VPC",
+   "Value": {
+    "Ref": "SharedVpc96F0F614"
+   },
+   "Export": {
+    "Name": "SharedVpcId"
+   }
+  },
+  "ExportsOutputRefSharedVpc96F0F6140AE947C7": {
+   "Value": {
+    "Ref": "SharedVpc96F0F614"
+   },
+   "Export": {
+    "Name": "SharedInfrastructure:ExportsOutputRefSharedVpc96F0F6140AE947C7"
+   }
+  },
+  "ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219": {
+   "Value": {
+    "Ref": "SharedVpcprivateSubnet1Subnet51E913CA"
+   },
+   "Export": {
+    "Name": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+   }
+  },
+  "ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA": {
+   "Value": {
+    "Ref": "SharedVpcprivateSubnet2Subnet50406F86"
+   },
+   "Export": {
+    "Name": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+   }
+  },
+  "ExportsOutputFnGetAttSharedVpc96F0F614CidrBlock4B6DE39C": {
+   "Value": {
+    "Fn::GetAtt": [
+     "SharedVpc96F0F614",
+     "CidrBlock"
+    ]
+   },
+   "Export": {
+    "Name": "SharedInfrastructure:ExportsOutputFnGetAttSharedVpc96F0F614CidrBlock4B6DE39C"
+   }
+  },
+  "ExportsOutputRefSharedVpcpublicSubnet1Subnet8B290348F6FC1372": {
+   "Value": {
+    "Ref": "SharedVpcpublicSubnet1Subnet8B290348"
+   },
+   "Export": {
+    "Name": "SharedInfrastructure:ExportsOutputRefSharedVpcpublicSubnet1Subnet8B290348F6FC1372"
+   }
+  },
+  "ExportsOutputRefSharedVpcpublicSubnet2SubnetE497BB00B8DAA4FE": {
+   "Value": {
+    "Ref": "SharedVpcpublicSubnet2SubnetE497BB00"
+   },
+   "Export": {
+    "Name": "SharedInfrastructure:ExportsOutputRefSharedVpcpublicSubnet2SubnetE497BB00B8DAA4FE"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

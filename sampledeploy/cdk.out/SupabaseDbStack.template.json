@@ -1,0 +1,334 @@
+{
+ "Resources": {
+  "SupabaseDbSGF87AE160": {
+   "Type": "AWS::EC2::SecurityGroup",
+   "Properties": {
+    "GroupDescription": "Security group for Supabase database",
+    "SecurityGroupEgress": [
+     {
+      "CidrIp": "0.0.0.0/0",
+      "Description": "Allow all outbound traffic by default",
+      "IpProtocol": "-1"
+     }
+    ],
+    "SecurityGroupIngress": [
+     {
+      "CidrIp": {
+       "Fn::ImportValue": "SharedInfrastructure:ExportsOutputFnGetAttSharedVpc96F0F614CidrBlock4B6DE39C"
+      },
+      "Description": "Allow PostgreSQL access from within VPC",
+      "FromPort": 5432,
+      "IpProtocol": "tcp",
+      "ToPort": 5432
+     }
+    ],
+    "VpcId": {
+     "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpc96F0F6140AE947C7"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/SupabaseDbSG/Resource"
+   }
+  },
+  "SupabaseDbPassword4F5D848D": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "Description": "Password for Supabase PostgreSQL database",
+    "GenerateSecretString": {
+     "ExcludePunctuation": true,
+     "IncludeSpace": false,
+     "PasswordLength": 16
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/SupabaseDbPassword/Resource"
+   }
+  },
+  "SupabaseJwtSecret4CEDF760": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "Description": "JWT secret for Supabase auth",
+    "GenerateSecretString": {
+     "ExcludePunctuation": true,
+     "IncludeSpace": false,
+     "PasswordLength": 40
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/SupabaseJwtSecret/Resource"
+   }
+  },
+  "SupabaseAnnonKey241C2469": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "Description": "Anon key for Supabase",
+    "GenerateSecretString": {
+     "ExcludePunctuation": true,
+     "IncludeSpace": false,
+     "PasswordLength": 40
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/SupabaseAnnonKey/Resource"
+   }
+  },
+  "SupabaseServiceRoleKey8194163D": {
+   "Type": "AWS::SecretsManager::Secret",
+   "Properties": {
+    "Description": "Service role key for Supabase",
+    "GenerateSecretString": {
+     "ExcludePunctuation": true,
+     "IncludeSpace": false,
+     "PasswordLength": 40
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/SupabaseServiceRoleKey/Resource"
+   }
+  },
+  "SupabaseParameterGroup0BF22D33": {
+   "Type": "AWS::RDS::DBParameterGroup",
+   "Properties": {
+    "Description": "Parameter group for Supabase RDS instance",
+    "Family": "postgres15",
+    "Parameters": {
+     "rds.force_ssl": "0",
+     "password_encryption": "md5"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/SupabaseParameterGroup/Resource"
+   }
+  },
+  "SupabasePostgresSubnetGroupF9DCE382": {
+   "Type": "AWS::RDS::DBSubnetGroup",
+   "Properties": {
+    "DBSubnetGroupDescription": "Subnet group for SupabasePostgres database",
+    "SubnetIds": [
+     {
+      "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+     },
+     {
+      "Fn::ImportValue": "SharedInfrastructure:ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/SupabasePostgres/SubnetGroup/Default"
+   }
+  },
+  "SupabasePostgres0313787B": {
+   "Type": "AWS::RDS::DBInstance",
+   "Properties": {
+    "AllocatedStorage": "20",
+    "AutoMinorVersionUpgrade": true,
+    "BackupRetentionPeriod": 7,
+    "CopyTagsToSnapshot": true,
+    "DBInstanceClass": "db.t4g.small",
+    "DBName": "postgres",
+    "DBParameterGroupName": {
+     "Ref": "SupabaseParameterGroup0BF22D33"
+    },
+    "DBSubnetGroupName": {
+     "Ref": "SupabasePostgresSubnetGroupF9DCE382"
+    },
+    "DeletionProtection": false,
+    "Engine": "postgres",
+    "EngineVersion": "15",
+    "MasterUserPassword": {
+     "Fn::Join": [
+      "",
+      [
+       "{{resolve:secretsmanager:",
+       {
+        "Ref": "SupabaseDbPassword4F5D848D"
+       },
+       ":SecretString:::}}"
+      ]
+     ]
+    },
+    "MasterUsername": "postgres",
+    "MaxAllocatedStorage": 100,
+    "MultiAZ": false,
+    "PubliclyAccessible": false,
+    "StorageType": "gp3",
+    "VPCSecurityGroups": [
+     {
+      "Fn::GetAtt": [
+       "SupabaseDbSGF87AE160",
+       "GroupId"
+      ]
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Snapshot",
+   "DeletionPolicy": "Snapshot",
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/SupabasePostgres/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/2WMSwrCQBBEz5L9pDUhC9cqiCvFHEA6k1bGmEno7lEkzN3FL35WRT1eVQ7ZpIAswbOktm7So6tgKBVtY/As24FsDkNJNrDTy4K70JvZzn+BaIQsk0qLHvfEd59JnyKTRsO1wLBGxpaU+P0zn/6wOSpWKLT0ougtmTJUnvRj8Adeaoy3vgraB43GdzXBQUanPIesgHFyEOdSDl5dS7B55BVoxW34/QAAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "SupabaseDbStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "PostgresEndpoint": {
+   "Description": "PostgreSQL database endpoint",
+   "Value": {
+    "Fn::GetAtt": [
+     "SupabasePostgres0313787B",
+     "Endpoint.Address"
+    ]
+   },
+   "Export": {
+    "Name": "SupabasePostgresEndpoint"
+   }
+  },
+  "SupabaseDbPasswordSecretArn": {
+   "Description": "ARN of the secret containing the Supabase database password",
+   "Value": {
+    "Ref": "SupabaseDbPassword4F5D848D"
+   },
+   "Export": {
+    "Name": "SupabaseDbPasswordSecretArn"
+   }
+  },
+  "SupabaseJwtSecretArn": {
+   "Description": "ARN of the secret containing the Supabase JWT secret",
+   "Value": {
+    "Ref": "SupabaseJwtSecret4CEDF760"
+   },
+   "Export": {
+    "Name": "SupabaseJwtSecretArn"
+   }
+  },
+  "SupabaseAnnonKeySecretArn": {
+   "Description": "ARN of the secret containing the Supabase Anon Key",
+   "Value": {
+    "Ref": "SupabaseAnnonKey241C2469"
+   },
+   "Export": {
+    "Name": "SupabaseAnnonKeySecretArn"
+   }
+  },
+  "SupabaseServiceRoleKeySecretArn": {
+   "Description": "ARN of the secret containing the Supabase Service Role Key",
+   "Value": {
+    "Ref": "SupabaseServiceRoleKey8194163D"
+   },
+   "Export": {
+    "Name": "SupabaseServiceRoleKeySecretArn"
+   }
+  },
+  "ExportsOutputFnGetAttSupabaseDbSGF87AE160GroupIdA7BB6970": {
+   "Value": {
+    "Fn::GetAtt": [
+     "SupabaseDbSGF87AE160",
+     "GroupId"
+    ]
+   },
+   "Export": {
+    "Name": "SupabaseDb:ExportsOutputFnGetAttSupabaseDbSGF87AE160GroupIdA7BB6970"
+   }
+  },
+  "ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2": {
+   "Value": {
+    "Ref": "SupabaseDbPassword4F5D848D"
+   },
+   "Export": {
+    "Name": "SupabaseDb:ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+   }
+  },
+  "ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE": {
+   "Value": {
+    "Ref": "SupabaseJwtSecret4CEDF760"
+   },
+   "Export": {
+    "Name": "SupabaseDb:ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+   }
+  },
+  "ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF": {
+   "Value": {
+    "Ref": "SupabaseAnnonKey241C2469"
+   },
+   "Export": {
+    "Name": "SupabaseDb:ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+   }
+  },
+  "ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0": {
+   "Value": {
+    "Ref": "SupabaseServiceRoleKey8194163D"
+   },
+   "Export": {
+    "Name": "SupabaseDb:ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+   }
+  },
+  "ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A": {
+   "Value": {
+    "Fn::GetAtt": [
+     "SupabasePostgres0313787B",
+     "Endpoint.Address"
+    ]
+   },
+   "Export": {
+    "Name": "SupabaseDb:ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+   }
+  },
+  "ExportsOutputRefSupabasePostgres0313787B30877F21": {
+   "Value": {
+    "Ref": "SupabasePostgres0313787B"
+   },
+   "Export": {
+    "Name": "SupabaseDb:ExportsOutputRefSupabasePostgres0313787B30877F21"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

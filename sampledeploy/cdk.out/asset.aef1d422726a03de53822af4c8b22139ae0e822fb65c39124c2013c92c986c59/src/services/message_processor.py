@@ -1,0 +1,162 @@
+import os
+import json
+import logging
+from .audio import process_audio_file, download_from_s3
+from .transcription import TranscriptionService
+from ..config.aws import get_queue_url
+import time
+
+logger = logging.getLogger('whisper')
+
+class MessageProcessor:
+    """Class to handle SQS message processing."""
+    
+    def __init__(self, sqs_client, s3_client, transcription_service, secrets):
+        """Initialize the message processor with required services."""
+        self.sqs_client = sqs_client
+        self.s3_client = s3_client
+        self.transcription_service = transcription_service
+        self.secrets = secrets
+        self.queue_url = get_queue_url()
+        self.logger = logging.getLogger(__name__)
+        
+    def cleanup_temp_files(self, temp_files):
+        """Clean up temporary files if they exist"""
+        for temp_file in temp_files:
+            try:
+                if temp_file and os.path.exists(temp_file):
+                    os.remove(temp_file)
+                    logger.info(f"Cleaned up temporary file: {temp_file}")
+            except Exception as e:
+                logger.warning(f"Failed to clean up temporary file {temp_file}: {str(e)}")
+                
+    def process_message(self, message):
+        """Process a single SQS message."""
+        temp_files = []  # Initialize temp files list
+        try:
+            # Parse message body
+            body = json.loads(message['Body'])
+            logger.info(f"Processing message: {json.dumps(body, indent=2)}")
+            logger.debug(f"Full message: {json.dumps(message, indent=2)}")
+
+            # Ensure directories exist
+            os.makedirs('./downloads', exist_ok=True)
+            os.makedirs('./processed', exist_ok=True)
+
+            # Create file paths using message ID or chunk ID for uniqueness
+            chunk_id = body.get('chunkId')
+            container_index = body.get('containerIndex')
+            content_type = body.get('contentType')
+            visit_id = body.get('visitId')
+            # Default to None if audioLanguage not present or is null/empty
+            audio_language = body.get('audioLanguage') or None
+            
+            # Validate required fields
+            if not visit_id:
+                raise Exception("Missing required field: visitId")
+            if container_index is None:
+                container_index = chunk_id  # Fall back to chunkId if containerIndex not provided
+            if container_index is None:
+                raise Exception("Missing both containerIndex and chunkId")
+                
+            message_id = message['MessageId']
+            raw_path = f'./downloads/{message_id}_{chunk_id}.webm'
+            processed_path = f'./processed/{message_id}_{chunk_id}.webm'
+            
+            # Add temporary paths to cleanup list
+            temp_files.extend([raw_path, processed_path])
+            
+            try:
+                # Download audio from S3
+                bucket = os.getenv('S3_BUCKET_NAME', 'whisperprocessing-files')
+                if not download_from_s3(self.s3_client, bucket, body['s3Key'], raw_path):
+                    raise Exception("Failed to download from S3")
+
+                # Process audio with ffmpeg
+                if not process_audio_file(raw_path, processed_path, content_type):
+                    raise Exception("Failed to process audio file")
+
+                # Transcribe audio
+                transcription_result = self.transcription_service.transcribe_audio(processed_path, audio_language)
+                    
+                logger.info(f"Transcription result for container {container_index}: {transcription_result}")
+
+                # Check if transcription was successful
+                if transcription_result is None:
+                    logger.error(f"Transcription failed for container {container_index}")
+                    return False
+
+                # Send transcription to API
+                api_url = self.secrets.get('API_URL')
+                api_token = self.secrets.get('API_TOKEN', os.getenv('API_TOKEN'))
+                is_final = body.get('isFinal', False)
+                
+                success = self.transcription_service.send_transcription_to_api(
+                    api_url, 
+                    api_token, 
+                    visit_id, 
+                    container_index, 
+                    transcription_result['text'], 
+                    transcription_result['language'],
+                    is_final
+                )
+
+                return True
+            finally:
+                # Clean up temporary files
+                self.cleanup_temp_files(temp_files)
+
+        except Exception as e:
+            logger.error(f"Error processing message: {e}", exc_info=True)
+            return False 
+
+    def start_processing(self):
+        """Start processing messages from the queue."""
+        logger.info(f"Starting message processing on queue: {self.queue_url}")
+        
+        while True:
+            try:
+                # Receive message from SQS queue
+                logger.debug("Polling SQS queue...")
+                response = self.sqs_client.receive_message(
+                    QueueUrl=self.queue_url,
+                    MaxNumberOfMessages=1,
+                    WaitTimeSeconds=20,
+                    MessageAttributeNames=['All'],
+                    VisibilityTimeout=300  # 5 minutes
+                )
+
+                messages = response.get('Messages', [])
+                if not messages:
+                    logger.debug("No messages received")
+                    continue
+                
+                logger.debug(f"Received {len(messages)} messages")
+                
+                for message in messages:
+                    message_id = message['MessageId']
+                    receipt_handle = message['ReceiptHandle']
+                    logger.info(f"Processing message {message_id}")
+                    
+                    success = self.process_message(message)
+                    
+                    if success:
+                        # Delete message only if processing was successful
+                        logger.info(f"Successfully processed message {message_id}, deleting from queue")
+                        self.sqs_client.delete_message(
+                            QueueUrl=self.queue_url,
+                            ReceiptHandle=receipt_handle
+                        )
+                        logger.debug(f"Deleted message {message_id} from queue")
+                    else:
+                        logger.warning(f"Failed to process message {message_id}, removing from queue")
+                        # Delete failed message instead of leaving it for retry
+                        self.sqs_client.delete_message(
+                            QueueUrl=self.queue_url,
+                            ReceiptHandle=receipt_handle
+                        )
+                        logger.debug(f"Deleted failed message {message_id} from queue")
+
+            except Exception as e:
+                logger.error(f"Error in message processing loop: {e}", exc_info=True)
+                time.sleep(5)  # Wait before retrying 

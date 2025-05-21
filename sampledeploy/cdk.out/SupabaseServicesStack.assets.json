@@ -1,0 +1,20 @@
+{
+  "version": "40.0.0",
+  "files": {
+    "7ec4bc7575bbaadcb150c4048f10c1a7eb2f5f3eec03a8804df1e223fca03e55": {
+      "source": {
+        "path": "SupabaseServicesStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "302263086944-us-east-2": {
+          "bucketName": "cdk-hnb659fds-assets-302263086944-us-east-2",
+          "objectKey": "7ec4bc7575bbaadcb150c4048f10c1a7eb2f5f3eec03a8804df1e223fca03e55.json",
+          "region": "us-east-2",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-file-publishing-role-302263086944-us-east-2"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=302263086944:domainName=sparkedby.app:region=us-east-2": {
+    "Id": "/hostedzone/Z03642041RUIUCIHW4W1W",
+    "Name": "sparkedby.app."
+  },
+  "hosted-zone:account=302263086944:domainName=sparkedby.app:region=us-east-1": {
+    "Id": "/hostedzone/Z03642041RUIUCIHW4W1W",
+    "Name": "sparkedby.app."
+  }
+}

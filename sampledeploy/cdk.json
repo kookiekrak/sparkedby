@@ -1,0 +1,16 @@
+{
+  "app": "node cdk.js",
+  "watch": {
+    "include": [
+      "**"
+    ],
+    "exclude": [
+      "README.md",
+      "cdk*.json",
+      "**/*.d.ts",
+      "**/*.js.map",
+      "node_modules",
+      "test"
+    ]
+  }
+} 

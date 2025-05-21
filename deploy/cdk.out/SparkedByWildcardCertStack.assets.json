@@ -1,0 +1,36 @@
+{
+  "version": "41.0.0",
+  "files": {
+    "b073cebcf4d61fb152a30f5a5e57a94df7f980a549fdf1a79a0b18c5750522d8": {
+      "displayName": "WildcardCertificate/CertificateRequestorFunction/Code",
+      "source": {
+        "path": "asset.b073cebcf4d61fb152a30f5a5e57a94df7f980a549fdf1a79a0b18c5750522d8",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "302263086944-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-302263086944-us-east-1",
+          "objectKey": "b073cebcf4d61fb152a30f5a5e57a94df7f980a549fdf1a79a0b18c5750522d8.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-file-publishing-role-302263086944-us-east-1"
+        }
+      }
+    },
+    "0f9a4bda8e7d2d7a5a4b237feeea1652376782e37741621c5d136a629cf599a3": {
+      "displayName": "SparkedByWildcardCertStack Template",
+      "source": {
+        "path": "SparkedByWildcardCertStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "302263086944-us-east-1": {
+          "bucketName": "cdk-hnb659fds-assets-302263086944-us-east-1",
+          "objectKey": "0f9a4bda8e7d2d7a5a4b237feeea1652376782e37741621c5d136a629cf599a3.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-file-publishing-role-302263086944-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

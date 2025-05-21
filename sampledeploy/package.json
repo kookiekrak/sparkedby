@@ -1,0 +1,28 @@
+{
+  "name": "deploy",
+  "version": "1.0.0",
+  "main": "cdk.js",
+  "license": "MIT",
+  "scripts": {
+    "cdk": "cdk",
+    "bootstrap": "cdk bootstrap",
+    "bootstrap:us-east-1": "AWS_REGION=us-east-1 cdk bootstrap",
+    "bootstrap:us-east-2": "AWS_REGION=us-east-2 cdk bootstrap",
+    "deploy": "cdk deploy",
+    "deploy:us-east-2": "AWS_REGION=us-east-2 cdk deploy",
+    "deploy:all": "cd ../ui && yarn build && cd ../deploy && yarn cdk deploy --all",
+    "deploy:supabase": "cdk deploy SupabaseStack --exclusively",
+    "deploy:supabase:us-east-2": "AWS_REGION=us-east-2 cdk deploy SupabaseStack --exclusively",
+    "synth": "cdk synth",
+    "synth:supabase": "cdk synth SupabaseStack --exclusively",
+    "diff": "cdk diff"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.184.1",
+    "constructs": "^10.4.2",
+    "toml": "^3.0.0"
+  },
+  "devDependencies": {
+    "aws-cdk": "^2.1004.0"
+  }
+}

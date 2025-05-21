@@ -1,0 +1,318 @@
+{
+  "version": "41.0.0",
+  "artifacts": {
+    "SparkedByWildcardCertStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "SparkedByWildcardCertStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "SparkedByWildcardCertStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-1",
+      "properties": {
+        "templateFile": "SparkedByWildcardCertStack.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "Environment": "Production",
+          "Project": "SparkedBy"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-1/0f9a4bda8e7d2d7a5a4b237feeea1652376782e37741621c5d136a629cf599a3.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "SparkedByWildcardCertStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "SparkedByWildcardCertStack.assets"
+      ],
+      "metadata": {
+        "/SparkedByWildcardCertStack": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "Environment",
+                "Value": "Production"
+              },
+              {
+                "Key": "Project",
+                "Value": "SparkedBy"
+              }
+            ]
+          }
+        ],
+        "/SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorFunction": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+            "data": 0
+          }
+        ],
+        "/SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WildcardCertificateCertificateRequestorFunctionServiceRole18B6C25C"
+          }
+        ],
+        "/SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WildcardCertificateCertificateRequestorFunctionServiceRoleDefaultPolicyEF601AFD"
+          }
+        ],
+        "/SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WildcardCertificateCertificateRequestorFunction703B4A01"
+          }
+        ],
+        "/SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WildcardCertificateCertificateRequestorResourceFBA164B9"
+          }
+        ],
+        "/SparkedByWildcardCertStack/WildcardCertificateArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WildcardCertificateArn"
+          }
+        ],
+        "/SparkedByWildcardCertStack/HostedZoneId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostedZoneId"
+          }
+        ],
+        "/SparkedByWildcardCertStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/SparkedByWildcardCertStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/SparkedByWildcardCertStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "SparkedByWildcardCertStack"
+    },
+    "SparkedByLandingStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "SparkedByLandingStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "SparkedByLandingStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-1",
+      "properties": {
+        "templateFile": "SparkedByLandingStack.template.json",
+        "terminationProtection": false,
+        "tags": {
+          "Environment": "Production",
+          "Project": "SparkedBy"
+        },
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-1/03c66a78f26cde8446e13c019370e1c1eea6751a95917067c371154e14b4d564.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "SparkedByLandingStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "SparkedByLandingStack.assets"
+      ],
+      "metadata": {
+        "/SparkedByLandingStack": [
+          {
+            "type": "aws:cdk:stack-tags",
+            "data": [
+              {
+                "Key": "Environment",
+                "Value": "Production"
+              },
+              {
+                "Key": "Project",
+                "Value": "SparkedBy"
+              }
+            ]
+          }
+        ],
+        "/SparkedByLandingStack/SparkedByWebsiteBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SparkedByWebsiteBucketDA40D721"
+          }
+        ],
+        "/SparkedByLandingStack/SparkedByWebsiteBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SparkedByWebsiteBucketPolicy0653FA73"
+          }
+        ],
+        "/SparkedByLandingStack/SparkedByWebsiteBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SparkedByWebsiteBucketAutoDeleteObjectsCustomResource41E216C4"
+          }
+        ],
+        "/SparkedByLandingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/SparkedByLandingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/SparkedByLandingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/SparkedByLandingStack/LandingPageDistribution/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingPageDistribution44DA4B02"
+          }
+        ],
+        "/SparkedByLandingStack/DeployLandingPage/AwsCliLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeployLandingPageAwsCliLayer8C25292A"
+          }
+        ],
+        "/SparkedByLandingStack/DeployLandingPage/CustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DeployLandingPageCustomResourceAFF801E1"
+          }
+        ],
+        "/SparkedByLandingStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-singleton",
+            "data": true
+          },
+          {
+            "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+            "data": 2
+          }
+        ],
+        "/SparkedByLandingStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+          }
+        ],
+        "/SparkedByLandingStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF"
+          }
+        ],
+        "/SparkedByLandingStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+          }
+        ],
+        "/SparkedByLandingStack/ApexAliasRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApexAliasRecordCCE6BE0E"
+          }
+        ],
+        "/SparkedByLandingStack/AWSCloudFrontPartitionHostedZoneIdMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/SparkedByLandingStack/WwwAliasRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WwwAliasRecord1B442697"
+          }
+        ],
+        "/SparkedByLandingStack/ApexSiteUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApexSiteUrl"
+          }
+        ],
+        "/SparkedByLandingStack/WwwSiteUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WwwSiteUrl"
+          }
+        ],
+        "/SparkedByLandingStack/CloudFrontUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CloudFrontUrl"
+          }
+        ],
+        "/SparkedByLandingStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/SparkedByLandingStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/SparkedByLandingStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "SparkedByLandingStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  },
+  "minimumCliVersion": "2.1005.0"
+}

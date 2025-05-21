@@ -1,0 +1,205 @@
+{
+ "Resources": {
+  "WildcardCertificateCertificateRequestorFunctionServiceRole18B6C25C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorFunction/ServiceRole/Resource"
+   }
+  },
+  "WildcardCertificateCertificateRequestorFunctionServiceRoleDefaultPolicyEF601AFD": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "acm:AddTagsToCertificate",
+        "acm:DeleteCertificate",
+        "acm:DescribeCertificate",
+        "acm:RequestCertificate",
+        "route53:GetChange"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "route53:changeResourceRecordSets",
+       "Condition": {
+        "ForAllValues:StringEquals": {
+         "route53:ChangeResourceRecordSetsRecordTypes": [
+          "CNAME"
+         ],
+         "route53:ChangeResourceRecordSetsActions": [
+          "UPSERT"
+         ]
+        },
+        "ForAllValues:StringLike": {
+         "route53:ChangeResourceRecordSetsNormalizedRecordNames": [
+          "*.sparkedby.app",
+          "*.www.sparkedby.app",
+          "*.sparkedby.app"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "arn:aws:route53:::hostedzone/Z03642041RUIUCIHW4W1W"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "WildcardCertificateCertificateRequestorFunctionServiceRoleDefaultPolicyEF601AFD",
+    "Roles": [
+     {
+      "Ref": "WildcardCertificateCertificateRequestorFunctionServiceRole18B6C25C"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "WildcardCertificateCertificateRequestorFunction703B4A01": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-302263086944-us-east-1",
+     "S3Key": "b073cebcf4d61fb152a30f5a5e57a94df7f980a549fdf1a79a0b18c5750522d8.zip"
+    },
+    "Handler": "index.certificateRequestHandler",
+    "Role": {
+     "Fn::GetAtt": [
+      "WildcardCertificateCertificateRequestorFunctionServiceRole18B6C25C",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs20.x",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "WildcardCertificateCertificateRequestorFunctionServiceRoleDefaultPolicyEF601AFD",
+    "WildcardCertificateCertificateRequestorFunctionServiceRole18B6C25C"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorFunction/Resource",
+    "aws:asset:path": "asset.b073cebcf4d61fb152a30f5a5e57a94df7f980a549fdf1a79a0b18c5750522d8",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "WildcardCertificateCertificateRequestorResourceFBA164B9": {
+   "Type": "AWS::CloudFormation::CustomResource",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "WildcardCertificateCertificateRequestorFunction703B4A01",
+      "Arn"
+     ]
+    },
+    "DomainName": "sparkedby.app",
+    "SubjectAlternativeNames": [
+     "www.sparkedby.app",
+     "*.sparkedby.app"
+    ],
+    "HostedZoneId": "Z03642041RUIUCIHW4W1W",
+    "Region": "us-east-1"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "SparkedByWildcardCertStack/WildcardCertificate/CertificateRequestorResource/Default"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02Oy27CQAxFv4W940Ioiy5Lqm6pgsQWmRkTmcwDxZ6iKsq/VwH1sTrH90pXrnH1ssHlgm5aOd9XQU447o1cDy1rLoNjoJseR8eDyVkcGUdK1PGAb0kPFMSTsW/+aggUT55wfC/JmeQEzTn9+ARCEcc2B57jOz9yEPc1nw+bQNdHUmVTfJ0BusZtcT3blpQnuId7o05SB01Ry/H32Xn0n++KXYtNkLJnvOjTZ13j6hmXi4uKVENJJpGxffAbva2yaQ0BAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "SparkedByWildcardCertStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "WildcardCertificateArn": {
+   "Description": "Wildcard Certificate ARN",
+   "Value": {
+    "Fn::GetAtt": [
+     "WildcardCertificateCertificateRequestorResourceFBA164B9",
+     "Arn"
+    ]
+   },
+   "Export": {
+    "Name": "SparkedByWildcardCertificateArn"
+   }
+  },
+  "HostedZoneId": {
+   "Description": "Hosted Zone ID",
+   "Value": "Z03642041RUIUCIHW4W1W",
+   "Export": {
+    "Name": "SparkedByWildcardHostedZoneId"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

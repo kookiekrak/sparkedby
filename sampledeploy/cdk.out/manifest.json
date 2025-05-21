@@ -1,0 +1,2115 @@
+{
+  "version": "40.0.0",
+  "artifacts": {
+    "CertificateStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "CertificateStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "CertificateStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-1",
+      "properties": {
+        "templateFile": "CertificateStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-1/027c39413f5b2c96e28915e32d40558522f2be6dd13ff011cad6830ca154cadb.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "CertificateStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "WhisperProcessingCertificate"
+      },
+      "dependencies": [
+        "CertificateStack.assets"
+      ],
+      "metadata": {
+        "/CertificateStack/Certificate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Certificate4E7ABB08"
+          }
+        ],
+        "/CertificateStack/CertificateArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CertificateArn"
+          }
+        ],
+        "/CertificateStack/DomainName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DomainName"
+          }
+        ],
+        "/CertificateStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/CertificateStack/ExportsWriteruseast2828FA26B/Resource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsWriteruseast2828FA26B86FBEFA7"
+          }
+        ],
+        "/CertificateStack/Custom::CrossRegionExportWriterCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/CertificateStack/Custom::CrossRegionExportWriterCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCrossRegionExportWriterCustomResourceProviderRoleC951B1E1"
+          }
+        ],
+        "/CertificateStack/Custom::CrossRegionExportWriterCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCrossRegionExportWriterCustomResourceProviderHandlerD8786E8A"
+          }
+        ],
+        "/CertificateStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/CertificateStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "CertificateStack"
+    },
+    "SharedInfrastructureStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "SharedInfrastructureStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "SharedInfrastructureStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-2",
+      "properties": {
+        "templateFile": "SharedInfrastructureStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-2/5cc8654ed4dc6cecdc361080e8683bbb576325707e8a441cda7dbdd75bbecff9.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "SharedInfrastructureStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "SharedInfrastructure"
+      },
+      "dependencies": [
+        "SharedInfrastructureStack.assets"
+      ],
+      "metadata": {
+        "/SharedInfrastructureStack/RegionalCertificate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RegionalCertificate5C8CFF45"
+          }
+        ],
+        "/SharedInfrastructureStack/VpcFlowLogsGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcFlowLogsGroupC5F6A8C5"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpc96F0F614"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet1Subnet8B290348"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet1RouteTable02281047"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet1RouteTableAssociation7BFDFDFE"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet1DefaultRoute52DB3CDD"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet1EIP05C300B0"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet1NATGatewayE91D769E"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet2SubnetE497BB00"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet2RouteTable7C5D1097"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet2RouteTableAssociation50161D4C"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/publicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcpublicSubnet2DefaultRouteDF4DAA30"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/privateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcprivateSubnet1Subnet51E913CA"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/privateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcprivateSubnet1RouteTable51D7A30B"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/privateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcprivateSubnet1RouteTableAssociationE44D436F"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/privateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcprivateSubnet1DefaultRoute87475E84"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/privateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcprivateSubnet2Subnet50406F86"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/privateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcprivateSubnet2RouteTable538229F1"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/privateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcprivateSubnet2RouteTableAssociation9C4B4B82"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/privateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcprivateSubnet2DefaultRoute261AECCB"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/isolatedSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcisolatedSubnet1Subnet0A8AF9AC"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/isolatedSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcisolatedSubnet1RouteTable2D80C6D9"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/isolatedSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcisolatedSubnet1RouteTableAssociation2F977BC1"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/isolatedSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcisolatedSubnet2SubnetB4E457F8"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/isolatedSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcisolatedSubnet2RouteTableCEB3B7D3"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/isolatedSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcisolatedSubnet2RouteTableAssociationA435FDDA"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcIGW869E5885"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcVPCGW9C69B7A5"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/FlowLog/IAMRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcFlowLogIAMRole993A5F27"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/FlowLog/IAMRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcFlowLogIAMRoleDefaultPolicyAE2F5C34"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/FlowLog/FlowLog": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcFlowLogBAFD07F9"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/S3Endpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcS3EndpointA07F723C"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/DynamoEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcDynamoEndpoint0345D604"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/EcrEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcEcrEndpointSecurityGroup2D339FA4"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/EcrEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcEcrEndpointEC349307"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/EcrDockerEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcEcrDockerEndpointSecurityGroup041BC8B5"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/EcrDockerEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcEcrDockerEndpoint3156011A"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/CloudWatchEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcCloudWatchEndpointSecurityGroupD232AFAD"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/CloudWatchEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcCloudWatchEndpoint6DFEABA0"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/CloudWatchLogsEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcCloudWatchLogsEndpointSecurityGroup9AFCD3A4"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/CloudWatchLogsEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcCloudWatchLogsEndpoint1D67EB6F"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/SecretsManagerEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcSecretsManagerEndpointSecurityGroup0AA9D055"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/SecretsManagerEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcSecretsManagerEndpoint70017CEB"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/SQSEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcSQSEndpointSecurityGroup85D97BCC"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/SQSEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcSQSEndpoint82CF44F4"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/SSMEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcSSMEndpointSecurityGroup8DF232A7"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/SSMEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcSSMEndpointF2FB644F"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/SSMMessagesEndpoint/SecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcSSMMessagesEndpointSecurityGroup93607E3A"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedVpc/SSMMessagesEndpoint/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedVpcSSMMessagesEndpointCF0D16F5"
+          }
+        ],
+        "/SharedInfrastructureStack/SharedCloudFrontOAC": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SharedCloudFrontOAC"
+          }
+        ],
+        "/SharedInfrastructureStack/VpcId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcId"
+          }
+        ],
+        "/SharedInfrastructureStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/SharedInfrastructureStack/Exports/Output{\"Ref\":\"SharedVpc96F0F614\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSharedVpc96F0F6140AE947C7"
+          }
+        ],
+        "/SharedInfrastructureStack/Exports/Output{\"Ref\":\"SharedVpcprivateSubnet1Subnet51E913CA\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSharedVpcprivateSubnet1Subnet51E913CA1A8F0219"
+          }
+        ],
+        "/SharedInfrastructureStack/Exports/Output{\"Ref\":\"SharedVpcprivateSubnet2Subnet50406F86\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSharedVpcprivateSubnet2Subnet50406F86A539CFDA"
+          }
+        ],
+        "/SharedInfrastructureStack/Exports/Output{\"Fn::GetAtt\":[\"SharedVpc96F0F614\",\"CidrBlock\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttSharedVpc96F0F614CidrBlock4B6DE39C"
+          }
+        ],
+        "/SharedInfrastructureStack/Exports/Output{\"Ref\":\"SharedVpcpublicSubnet1Subnet8B290348\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSharedVpcpublicSubnet1Subnet8B290348F6FC1372"
+          }
+        ],
+        "/SharedInfrastructureStack/Exports/Output{\"Ref\":\"SharedVpcpublicSubnet2SubnetE497BB00\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSharedVpcpublicSubnet2SubnetE497BB00B8DAA4FE"
+          }
+        ],
+        "/SharedInfrastructureStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/SharedInfrastructureStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "SharedInfrastructureStack"
+    },
+    "LandingPageStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "LandingPageStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "LandingPageStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-2",
+      "properties": {
+        "templateFile": "LandingPageStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-2/c5ff40493be09c77a5a6c95eb37462968f7f1af6f3559074ef26ae02d0a760f7.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "LandingPageStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "LandingPage"
+      },
+      "dependencies": [
+        "CertificateStack",
+        "LandingPageStack.assets"
+      ],
+      "metadata": {
+        "/LandingPageStack/LandingBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingBucket23FE90FB"
+          }
+        ],
+        "/LandingPageStack/LandingBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingBucketPolicy6504E234"
+          }
+        ],
+        "/LandingPageStack/LandingBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingBucketAutoDeleteObjectsCustomResourceFC872580"
+          }
+        ],
+        "/LandingPageStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/LandingPageStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/LandingPageStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/LandingPageStack/CloudFrontOAC": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CloudFrontOAC"
+          }
+        ],
+        "/LandingPageStack/LandingDistributionV2/Origin1/S3Origin/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingDistributionV2Origin1S3Origin7E2D62C6"
+          }
+        ],
+        "/LandingPageStack/LandingDistributionV2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingDistributionV255E5EFE6"
+          }
+        ],
+        "/LandingPageStack/LandingDeployment/AwsCliLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingDeploymentAwsCliLayer63FCABB1"
+          }
+        ],
+        "/LandingPageStack/LandingDeployment/CustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingDeploymentCustomResourceFAFE6CAA"
+          }
+        ],
+        "/LandingPageStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-singleton",
+            "data": true
+          },
+          {
+            "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+            "data": 2
+          }
+        ],
+        "/LandingPageStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
+          }
+        ],
+        "/LandingPageStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF"
+          }
+        ],
+        "/LandingPageStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536"
+          }
+        ],
+        "/LandingPageStack/LandingARecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingARecord60EE6632"
+          }
+        ],
+        "/LandingPageStack/AWSCloudFrontPartitionHostedZoneIdMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/LandingPageStack/LandingWWWARecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingWWWARecord1DFE9016"
+          }
+        ],
+        "/LandingPageStack/LandingURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingURL"
+          }
+        ],
+        "/LandingPageStack/LandingPageURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LandingPageURL"
+          }
+        ],
+        "/LandingPageStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/LandingPageStack/ExportsReader/Resource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsReader8B249524"
+          }
+        ],
+        "/LandingPageStack/Custom::CrossRegionExportReaderCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/LandingPageStack/Custom::CrossRegionExportReaderCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD"
+          }
+        ],
+        "/LandingPageStack/Custom::CrossRegionExportReaderCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCrossRegionExportReaderCustomResourceProviderHandler46647B68"
+          }
+        ],
+        "/LandingPageStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/LandingPageStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "LandingPageStack"
+    },
+    "WhisperProcessingStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "WhisperProcessingStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "WhisperProcessingStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-2",
+      "properties": {
+        "templateFile": "WhisperProcessingStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-2/1cce011b915ac09add84256eb20a55bac1266ac93308014bb50b3770e3a3885c.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "WhisperProcessingStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "WhisperProcessing"
+      },
+      "dependencies": [
+        "SharedInfrastructureStack",
+        "WhisperProcessingStack.assets"
+      ],
+      "metadata": {
+        "/WhisperProcessingStack/WhisperDLQ/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperDLQFCBB4107"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperProcessingQueue/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperProcessingQueue902D22B9"
+          }
+        ],
+        "/WhisperProcessingStack/ApiUser/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiUser54822C88"
+          }
+        ],
+        "/WhisperProcessingStack/ApiUserAccessKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiUserAccessKeyE80A6E8B"
+          }
+        ],
+        "/WhisperProcessingStack/ApiUserPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiUserPolicy5740E403"
+          }
+        ],
+        "/WhisperProcessingStack/AccessKeyId": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AccessKeyId"
+          }
+        ],
+        "/WhisperProcessingStack/SecretAccessKey": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SecretAccessKey"
+          }
+        ],
+        "/WhisperProcessingStack/BucketName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketName"
+          }
+        ],
+        "/WhisperProcessingStack/ProdQueueUrl": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ProdQueueUrl"
+          }
+        ],
+        "/WhisperProcessingStack/Region": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Region"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperCluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperCluster3B62D340"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperServiceLogs/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperServiceLogs54B5DC49"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperEFSSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperEFSSecurityGroupBB8C0F0D"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperEFSSecurityGroup/from WhisperProcessingStackWhisperECSSecurityGroupA753763F:2049": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperEFSSecurityGroupfromWhisperProcessingStackWhisperECSSecurityGroupA753763F2049DA9B01A7"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperModelCache/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperModelCache919B57BB"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperModelCache/EfsMountTarget1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperModelCacheEfsMountTarget1F008F6F3"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperModelCache/EfsMountTarget2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperModelCacheEfsMountTarget2B75CF7A9"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperModelCache/WhisperContainerAccess/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperModelCacheWhisperContainerAccess86365E9F"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperECSSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperECSSecurityGroupA98EC4DF"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperTask/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperTaskTaskRoleBF6B9E32"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperTask/TaskRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperTaskTaskRoleDefaultPolicyBF3F88A7"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperTask/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperTask7067F0D5"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperTask/ExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperTaskExecutionRoleED9FB9FB"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperTask/ExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperTaskExecutionRoleDefaultPolicyC86611D3"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperServiceB10F19EC"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperService/TaskCount/Target/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperServiceTaskCountTargetA01DBDF3"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperService/TaskCount/Target/QueueMessagesVisible/LowerPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperServiceTaskCountTargetQueueMessagesVisibleLowerPolicy47F2F070"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperService/TaskCount/Target/QueueMessagesVisible/LowerAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperServiceTaskCountTargetQueueMessagesVisibleLowerAlarm9015F972"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperService/TaskCount/Target/QueueMessagesVisible/UpperPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperServiceTaskCountTargetQueueMessagesVisibleUpperPolicyA50E5334"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperService/TaskCount/Target/QueueMessagesVisible/UpperAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperServiceTaskCountTargetQueueMessagesVisibleUpperAlarm2D3D3049"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperDashboard/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperDashboardBC1AE4A3"
+          }
+        ],
+        "/WhisperProcessingStack/EcsClusterName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "EcsClusterName"
+          }
+        ],
+        "/WhisperProcessingStack/LogGroupName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogGroupName"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperStackName": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperStackName"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperaudioBucket": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperaudioBucket"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperwhisperQueue": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperwhisperQueue"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperapiUser": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperapiUser"
+          }
+        ],
+        "/WhisperProcessingStack/Whisperservice": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Whisperservice"
+          }
+        ],
+        "/WhisperProcessingStack/Whispercluster": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Whispercluster"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperlogGroup": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperlogGroup"
+          }
+        ],
+        "/WhisperProcessingStack/WhisperwhisperSecret": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WhisperwhisperSecret"
+          }
+        ],
+        "/WhisperProcessingStack/Whispervpc": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Whispervpc"
+          }
+        ],
+        "/WhisperProcessingStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/WhisperProcessingStack/Exports/Output{\"Fn::GetAtt\":[\"WhisperProcessingQueue902D22B9\",\"Arn\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttWhisperProcessingQueue902D22B9Arn9F894375"
+          }
+        ],
+        "/WhisperProcessingStack/Exports/Output{\"Ref\":\"WhisperProcessingQueue902D22B9\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefWhisperProcessingQueue902D22B9313A56D8"
+          }
+        ],
+        "/WhisperProcessingStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/WhisperProcessingStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "WhisperProcessingStack"
+    },
+    "SupabaseDbStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "SupabaseDbStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "SupabaseDbStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-2",
+      "properties": {
+        "templateFile": "SupabaseDbStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-2/88426d468a4a24b8fc18c20d9d32a14ca210526e8a9833d79559b65158843483.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "SupabaseDbStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "SupabaseDb"
+      },
+      "dependencies": [
+        "SharedInfrastructureStack",
+        "SupabaseDbStack.assets"
+      ],
+      "metadata": {
+        "/SupabaseDbStack/SupabaseDbSG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseDbSGF87AE160"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseDbPassword/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseDbPassword4F5D848D"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseJwtSecret/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseJwtSecret4CEDF760"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseAnnonKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseAnnonKey241C2469"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseServiceRoleKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceRoleKey8194163D"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseParameterGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseParameterGroup0BF22D33"
+          }
+        ],
+        "/SupabaseDbStack/SupabasePostgres/SubnetGroup/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePostgresSubnetGroupF9DCE382"
+          }
+        ],
+        "/SupabaseDbStack/SupabasePostgres/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePostgres0313787B"
+          }
+        ],
+        "/SupabaseDbStack/PostgresEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PostgresEndpoint"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseDbPasswordSecretArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseDbPasswordSecretArn"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseJwtSecretArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseJwtSecretArn"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseAnnonKeySecretArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseAnnonKeySecretArn"
+          }
+        ],
+        "/SupabaseDbStack/SupabaseServiceRoleKeySecretArn": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceRoleKeySecretArn"
+          }
+        ],
+        "/SupabaseDbStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/SupabaseDbStack/Exports/Output{\"Fn::GetAtt\":[\"SupabaseDbSGF87AE160\",\"GroupId\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttSupabaseDbSGF87AE160GroupIdA7BB6970"
+          }
+        ],
+        "/SupabaseDbStack/Exports/Output{\"Ref\":\"SupabaseDbPassword4F5D848D\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSupabaseDbPassword4F5D848DEB4E82E2"
+          }
+        ],
+        "/SupabaseDbStack/Exports/Output{\"Ref\":\"SupabaseJwtSecret4CEDF760\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSupabaseJwtSecret4CEDF7607C510DFE"
+          }
+        ],
+        "/SupabaseDbStack/Exports/Output{\"Ref\":\"SupabaseAnnonKey241C2469\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSupabaseAnnonKey241C24696D2B27DF"
+          }
+        ],
+        "/SupabaseDbStack/Exports/Output{\"Ref\":\"SupabaseServiceRoleKey8194163D\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSupabaseServiceRoleKey8194163DBF3B9EB0"
+          }
+        ],
+        "/SupabaseDbStack/Exports/Output{\"Fn::GetAtt\":[\"SupabasePostgres0313787B\",\"Endpoint.Address\"]}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputFnGetAttSupabasePostgres0313787BEndpointAddressC585A80A"
+          }
+        ],
+        "/SupabaseDbStack/Exports/Output{\"Ref\":\"SupabasePostgres0313787B\"}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsOutputRefSupabasePostgres0313787B30877F21"
+          }
+        ],
+        "/SupabaseDbStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/SupabaseDbStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "SupabaseDbStack"
+    },
+    "SupabaseServicesStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "SupabaseServicesStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "SupabaseServicesStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-2",
+      "properties": {
+        "templateFile": "SupabaseServicesStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-2/7ec4bc7575bbaadcb150c4048f10c1a7eb2f5f3eec03a8804df1e223fca03e55.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "SupabaseServicesStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "SupabaseServices"
+      },
+      "dependencies": [
+        "CertificateStack",
+        "SharedInfrastructureStack",
+        "SupabaseDbStack",
+        "SupabaseServicesStack.assets"
+      ],
+      "metadata": {
+        "/SupabaseServicesStack/SupabaseCertificate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseCertificate2E339463"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseServiceSG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceSGF39DA778"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:ALL PORTS": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceSGfromSupabaseServicesStackSupabaseServiceSGC43B9CF1ALLPORTS86613543"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseLbSGC4F683FB:80": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceSGfromSupabaseServicesStackSupabaseLbSGC4F683FB809D5BD391"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseLbSGC4F683FB:8001": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceSGfromSupabaseServicesStackSupabaseLbSGC4F683FB8001FD618969"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:6432": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceSGfromSupabaseServicesStackSupabaseServiceSGC43B9CF16432FDDCE0A3"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:5432": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceSGfromSupabaseServicesStackSupabaseServiceSGC43B9CF15432033958E7"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:6543": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceSGfromSupabaseServicesStackSupabaseServiceSGC43B9CF16543BEF85EA4"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseServiceSG/from SupabaseServicesStackSupabaseLbSGC4F683FB:8000": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseServiceSGfromSupabaseServicesStackSupabaseLbSGC4F683FB8000378B05B7"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseLbSG/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseLbSG67458248"
+          }
+        ],
+        "/SupabaseServicesStack/ImportedDbSecurityGroup/from SupabaseServicesStackSupabaseServiceSGC43B9CF1:5432": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ImportedDbSecurityGroupfromSupabaseServicesStackSupabaseServiceSGC43B9CF15432B7D356F0"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseCluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseCluster6B350E35"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseCluster/DefaultServiceDiscoveryNamespace/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseClusterDefaultServiceDiscoveryNamespace6179BE77"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseTaskExecutionRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseTaskExecutionRole0E31FB5D"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseTaskExecutionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseTaskExecutionRoleDefaultPolicyC0F00D50"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseTaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseTaskRoleFF032C96"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseALB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseALB4990A1B5"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseALB/SupabaseHttpsListener/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseALBSupabaseHttpsListenerD7C3A153"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseALB/SupabaseHttpsListener/SupabaseKongTargetRule/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseALBSupabaseHttpsListenerSupabaseKongTargetRule43533AA9"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseALB/SupabaseHttpListener/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseALBSupabaseHttpListener8A24F474"
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePoolerTaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePoolerTaskDefE67358D3"
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePoolerTaskDef/SupabasePooler/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePoolerTaskDefSupabasePoolerLogGroup64515FB5"
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePoolerService": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "minHealthyPercent has not been configured so the default value of 50% is used. The number of running tasks will decrease below the desired count during deployments etc. See https://github.com/aws/aws-cdk/issues/31705 [ack: @aws-cdk/aws-ecs:minHealthyPercent]",
+            "trace": [
+              "Annotations.addMessage (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new BaseService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/base/base-service.js:1:8100)",
+              "new FargateService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/fargate/fargate-service.js:1:3551)",
+              "new SupabaseServicesStack (/Users/tpr/src/global-sc/deploy/lib/stacks/supabase-services-stack.js:249:27)",
+              "Object.<anonymous> (/Users/tpr/src/global-sc/deploy/cdk.js:207:31)",
+              "Module._compile (node:internal/modules/cjs/loader:1554:14)",
+              "Object..js (node:internal/modules/cjs/loader:1706:10)",
+              "Module.load (node:internal/modules/cjs/loader:1289:32)",
+              "Function._load (node:internal/modules/cjs/loader:1108:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:220:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "node:internal/main/run_main_module:36:49"
+            ]
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePoolerService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePoolerService02591873"
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePoolerService/CloudmapService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePoolerServiceCloudmapService953A502F"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseKongTaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseKongTaskDefBFA5573E"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseKongTaskDef/SupabaseKong/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseKongTaskDefSupabaseKongLogGroup7340D297"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseKongService": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "minHealthyPercent has not been configured so the default value of 50% is used. The number of running tasks will decrease below the desired count during deployments etc. See https://github.com/aws/aws-cdk/issues/31705 [ack: @aws-cdk/aws-ecs:minHealthyPercent]",
+            "trace": [
+              "Annotations.addMessage (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new BaseService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/base/base-service.js:1:8100)",
+              "new FargateService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/fargate/fargate-service.js:1:3551)",
+              "new SupabaseServicesStack (/Users/tpr/src/global-sc/deploy/lib/stacks/supabase-services-stack.js:408:25)",
+              "Object.<anonymous> (/Users/tpr/src/global-sc/deploy/cdk.js:207:31)",
+              "Module._compile (node:internal/modules/cjs/loader:1554:14)",
+              "Object..js (node:internal/modules/cjs/loader:1706:10)",
+              "Module.load (node:internal/modules/cjs/loader:1289:32)",
+              "Function._load (node:internal/modules/cjs/loader:1108:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:220:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "node:internal/main/run_main_module:36:49"
+            ]
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseKongService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseKongService132F4875"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseKongService/CloudmapService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseKongServiceCloudmapServiceA9BA8508"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseKongTargetGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseKongTargetGroup392AE762"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseGotrueTaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseGotrueTaskDef2D300A6F"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseGotrueTaskDef/SupabaseGotrue/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseGotrueTaskDefSupabaseGotrueLogGroup40A13AAA"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseGotrueService": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "minHealthyPercent has not been configured so the default value of 50% is used. The number of running tasks will decrease below the desired count during deployments etc. See https://github.com/aws/aws-cdk/issues/31705 [ack: @aws-cdk/aws-ecs:minHealthyPercent]",
+            "trace": [
+              "Annotations.addMessage (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new BaseService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/base/base-service.js:1:8100)",
+              "new FargateService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/fargate/fargate-service.js:1:3551)",
+              "new SupabaseServicesStack (/Users/tpr/src/global-sc/deploy/lib/stacks/supabase-services-stack.js:501:27)",
+              "Object.<anonymous> (/Users/tpr/src/global-sc/deploy/cdk.js:207:31)",
+              "Module._compile (node:internal/modules/cjs/loader:1554:14)",
+              "Object..js (node:internal/modules/cjs/loader:1706:10)",
+              "Module.load (node:internal/modules/cjs/loader:1289:32)",
+              "Function._load (node:internal/modules/cjs/loader:1108:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:220:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "node:internal/main/run_main_module:36:49"
+            ]
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseGotrueService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseGotrueService284F1C38"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseGotrueService/CloudmapService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseGotrueServiceCloudmapServiceF8604CB7"
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePostgrestTaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePostgrestTaskDefF7085D40"
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePostgrestTaskDef/SupabasePostgrest/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePostgrestTaskDefSupabasePostgrestLogGroup80BDB325"
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePostgrestService": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "minHealthyPercent has not been configured so the default value of 50% is used. The number of running tasks will decrease below the desired count during deployments etc. See https://github.com/aws/aws-cdk/issues/31705 [ack: @aws-cdk/aws-ecs:minHealthyPercent]",
+            "trace": [
+              "Annotations.addMessage (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new BaseService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/base/base-service.js:1:8100)",
+              "new FargateService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/fargate/fargate-service.js:1:3551)",
+              "new SupabaseServicesStack (/Users/tpr/src/global-sc/deploy/lib/stacks/supabase-services-stack.js:564:30)",
+              "Object.<anonymous> (/Users/tpr/src/global-sc/deploy/cdk.js:207:31)",
+              "Module._compile (node:internal/modules/cjs/loader:1554:14)",
+              "Object..js (node:internal/modules/cjs/loader:1706:10)",
+              "Module.load (node:internal/modules/cjs/loader:1289:32)",
+              "Function._load (node:internal/modules/cjs/loader:1108:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:220:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "node:internal/main/run_main_module:36:49"
+            ]
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePostgrestService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePostgrestServiceD9B6553E"
+          }
+        ],
+        "/SupabaseServicesStack/SupabasePostgrestService/CloudmapService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabasePostgrestServiceCloudmapServiceB34DCFA8"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseRealtimeTaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseRealtimeTaskDef61C20B39"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseRealtimeTaskDef/SupabaseRealtime/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseRealtimeTaskDefSupabaseRealtimeLogGroup07E7B687"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseRealtimeService": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "minHealthyPercent has not been configured so the default value of 50% is used. The number of running tasks will decrease below the desired count during deployments etc. See https://github.com/aws/aws-cdk/issues/31705 [ack: @aws-cdk/aws-ecs:minHealthyPercent]",
+            "trace": [
+              "Annotations.addMessage (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new BaseService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/base/base-service.js:1:8100)",
+              "new FargateService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/fargate/fargate-service.js:1:3551)",
+              "new SupabaseServicesStack (/Users/tpr/src/global-sc/deploy/lib/stacks/supabase-services-stack.js:643:29)",
+              "Object.<anonymous> (/Users/tpr/src/global-sc/deploy/cdk.js:207:31)",
+              "Module._compile (node:internal/modules/cjs/loader:1554:14)",
+              "Object..js (node:internal/modules/cjs/loader:1706:10)",
+              "Module.load (node:internal/modules/cjs/loader:1289:32)",
+              "Function._load (node:internal/modules/cjs/loader:1108:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:220:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "node:internal/main/run_main_module:36:49"
+            ]
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseRealtimeService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseRealtimeService689C04CD"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseRealtimeService/CloudmapService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseRealtimeServiceCloudmapServiceE28C95A2"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseMetaTaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseMetaTaskDef621F5592"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseMetaTaskDef/SupabaseMeta/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseMetaTaskDefSupabaseMetaLogGroup973B9A17"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseMetaService": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "minHealthyPercent has not been configured so the default value of 50% is used. The number of running tasks will decrease below the desired count during deployments etc. See https://github.com/aws/aws-cdk/issues/31705 [ack: @aws-cdk/aws-ecs:minHealthyPercent]",
+            "trace": [
+              "Annotations.addMessage (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new BaseService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/base/base-service.js:1:8100)",
+              "new FargateService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/fargate/fargate-service.js:1:3551)",
+              "new SupabaseServicesStack (/Users/tpr/src/global-sc/deploy/lib/stacks/supabase-services-stack.js:705:25)",
+              "Object.<anonymous> (/Users/tpr/src/global-sc/deploy/cdk.js:207:31)",
+              "Module._compile (node:internal/modules/cjs/loader:1554:14)",
+              "Object..js (node:internal/modules/cjs/loader:1706:10)",
+              "Module.load (node:internal/modules/cjs/loader:1289:32)",
+              "Function._load (node:internal/modules/cjs/loader:1108:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:220:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "node:internal/main/run_main_module:36:49"
+            ]
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseMetaService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseMetaService71A8D970"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseMetaService/CloudmapService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseMetaServiceCloudmapService630477A8"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseStudioTaskDef/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseStudioTaskDef1AEFDD97"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseStudioTaskDef/SupabaseStudio/LogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseStudioTaskDefSupabaseStudioLogGroup5DDDC40B"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseStudioService": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "minHealthyPercent has not been configured so the default value of 50% is used. The number of running tasks will decrease below the desired count during deployments etc. See https://github.com/aws/aws-cdk/issues/31705 [ack: @aws-cdk/aws-ecs:minHealthyPercent]",
+            "trace": [
+              "Annotations.addMessage (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1608)",
+              "Annotations.addWarningV2 (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/core/lib/annotations.js:1:825)",
+              "new BaseService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/base/base-service.js:1:8100)",
+              "new FargateService (/Users/tpr/src/global-sc/deploy/node_modules/aws-cdk-lib/aws-ecs/lib/fargate/fargate-service.js:1:3551)",
+              "new SupabaseServicesStack (/Users/tpr/src/global-sc/deploy/lib/stacks/supabase-services-stack.js:778:27)",
+              "Object.<anonymous> (/Users/tpr/src/global-sc/deploy/cdk.js:207:31)",
+              "Module._compile (node:internal/modules/cjs/loader:1554:14)",
+              "Object..js (node:internal/modules/cjs/loader:1706:10)",
+              "Module.load (node:internal/modules/cjs/loader:1289:32)",
+              "Function._load (node:internal/modules/cjs/loader:1108:12)",
+              "TracingChannel.traceSync (node:diagnostics_channel:322:14)",
+              "wrapModuleLoad (node:internal/modules/cjs/loader:220:24)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)",
+              "node:internal/main/run_main_module:36:49"
+            ]
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseStudioService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseStudioService72BC584E"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseStudioService/CloudmapService/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseStudioServiceCloudmapService9E29C4E9"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseDnsRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseDnsRecordCF5C46E4"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseDashboard/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseDashboard4E7C3C82"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseURL"
+          }
+        ],
+        "/SupabaseServicesStack/PgBouncerEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PgBouncerEndpoint"
+          }
+        ],
+        "/SupabaseServicesStack/SupabaseNamespace": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SupabaseNamespace"
+          }
+        ],
+        "/SupabaseServicesStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/SupabaseServicesStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/SupabaseServicesStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "SupabaseServicesStack"
+    },
+    "WebStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "WebStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "WebStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://302263086944/us-east-2",
+      "properties": {
+        "templateFile": "WebStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-deploy-role-302263086944-us-east-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-cfn-exec-role-302263086944-us-east-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-302263086944-us-east-2/a55dc5c68b0694171fd1c42bc1f569db68ec6cb9825f6a2ad5cb94d711668b51.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "WebStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::302263086944:role/cdk-hnb659fds-lookup-role-302263086944-us-east-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "Web"
+      },
+      "dependencies": [
+        "CertificateStack",
+        "WhisperProcessingStack",
+        "SharedInfrastructureStack",
+        "WebStack.assets"
+      ],
+      "metadata": {
+        "/WebStack/RegionalCertificate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "RegionalCertificate5C8CFF45"
+          }
+        ],
+        "/WebStack/UIBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIBucketB980636D"
+          }
+        ],
+        "/WebStack/UIBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIBucketPolicy3F03C682"
+          }
+        ],
+        "/WebStack/UIBucket/AutoDeleteObjectsCustomResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIBucketAutoDeleteObjectsCustomResource7CECA018"
+          }
+        ],
+        "/WebStack/Custom::S3AutoDeleteObjectsCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/WebStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
+          }
+        ],
+        "/WebStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
+          }
+        ],
+        "/WebStack/UICachePolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UICachePolicy055D3077"
+          }
+        ],
+        "/WebStack/UIDistribution/Origin1/S3Origin/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIDistributionOrigin1S3Origin80D2A7D1"
+          }
+        ],
+        "/WebStack/UIDistribution/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIDistribution2F12206B"
+          }
+        ],
+        "/WebStack/UIDeployment/AwsCliLayer/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIDeploymentAwsCliLayer90F5818D"
+          }
+        ],
+        "/WebStack/UIDeployment/CustomResource-1024MiB/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIDeploymentCustomResource1024MiB7298592A"
+          }
+        ],
+        "/WebStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiB": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-singleton",
+            "data": true
+          },
+          {
+            "type": "aws:cdk:is-custom-resource-handler-runtime-family",
+            "data": 2
+          }
+        ],
+        "/WebStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiB/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRole739949D8"
+          }
+        ],
+        "/WebStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiB/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBServiceRoleDefaultPolicy0801355D"
+          }
+        ],
+        "/WebStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C1024MiBB049752D"
+          }
+        ],
+        "/WebStack/UIARecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIARecordB5B8EE44"
+          }
+        ],
+        "/WebStack/AWSCloudFrontPartitionHostedZoneIdMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/WebStack/APIStackIdentifier": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIStackIdentifier"
+          }
+        ],
+        "/WebStack/AppCredentials/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AppCredentials06DBAC7C"
+          }
+        ],
+        "/WebStack/APIFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIFunctionServiceRole411B6D35"
+          }
+        ],
+        "/WebStack/APIFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIFunctionServiceRoleDefaultPolicy55C0651E"
+          }
+        ],
+        "/WebStack/APIFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIFunction49CD189B"
+          }
+        ],
+        "/WebStack/APIFunction/LogRetention/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIFunctionLogRetentionE8A704D9"
+          }
+        ],
+        "/WebStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+          }
+        ],
+        "/WebStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB"
+          }
+        ],
+        "/WebStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A"
+          }
+        ],
+        "/WebStack/ApiLogGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiLogGroup1DEDFC07"
+          }
+        ],
+        "/WebStack/API/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "API62EA1CFF"
+          }
+        ],
+        "/WebStack/API/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APICloudWatchRole927CEB3B"
+          }
+        ],
+        "/WebStack/API/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIAccountD065B313"
+          }
+        ],
+        "/WebStack/API/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIDeployment0E06874E6adc7a0f411c03397d9ec1a93bc9e378"
+          }
+        ],
+        "/WebStack/API/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIDeploymentStageprod278E75BA"
+          }
+        ],
+        "/WebStack/API/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIEndpoint1793E782"
+          }
+        ],
+        "/WebStack/API/CustomDomain/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APICustomDomain7C8980EC"
+          }
+        ],
+        "/WebStack/API/CustomDomain/Map:--=>WebStackAPIF1F342DE/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APICustomDomainMapWebStackAPIF1F342DE9F5E9822"
+          }
+        ],
+        "/WebStack/API/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIOPTIONSCA9FDA90"
+          }
+        ],
+        "/WebStack/API/Default/{proxy+}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIproxy35016696"
+          }
+        ],
+        "/WebStack/API/Default/{proxy+}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIproxyOPTIONS62216A87"
+          }
+        ],
+        "/WebStack/API/Default/{proxy+}/ANY/ApiPermission.WebStackAPIF1F342DE.ANY..{proxy+}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIproxyANYApiPermissionWebStackAPIF1F342DEANYproxy5990D64F"
+          }
+        ],
+        "/WebStack/API/Default/{proxy+}/ANY/ApiPermission.Test.WebStackAPIF1F342DE.ANY..{proxy+}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIproxyANYApiPermissionTestWebStackAPIF1F342DEANYproxyBD0B2C35"
+          }
+        ],
+        "/WebStack/API/Default/{proxy+}/ANY/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIproxyANY181E6698"
+          }
+        ],
+        "/WebStack/API/Default/ANY/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIANY77077448"
+          }
+        ],
+        "/WebStack/ApiErrorAlarm/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiErrorAlarmD3E841A2"
+          }
+        ],
+        "/WebStack/APIARecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIARecord58BC377E"
+          }
+        ],
+        "/WebStack/UIURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "UIURL"
+          }
+        ],
+        "/WebStack/APIURL": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "APIURL"
+          }
+        ],
+        "/WebStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/WebStack/ExportsReader/Resource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ExportsReader8B249524"
+          }
+        ],
+        "/WebStack/Custom::CrossRegionExportReaderCustomResourceProvider": [
+          {
+            "type": "aws:cdk:is-custom-resource-handler-customResourceProvider",
+            "data": true
+          }
+        ],
+        "/WebStack/Custom::CrossRegionExportReaderCustomResourceProvider/Role": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD"
+          }
+        ],
+        "/WebStack/Custom::CrossRegionExportReaderCustomResourceProvider/Handler": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CustomCrossRegionExportReaderCustomResourceProviderHandler46647B68"
+          }
+        ],
+        "/WebStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/WebStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "WebStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

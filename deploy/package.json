@@ -1,0 +1,40 @@
+{
+  "name": "sparkedby-deployment",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "cdk": "cdk",
+    "bootstrap": "cdk bootstrap",
+    "bootstrap:us-east-1": "AWS_REGION=us-east-1 cdk bootstrap",
+    "bootstrap:all": "npm run bootstrap && npm run bootstrap:us-east-1",
+    "deploy": "cdk deploy",
+    "deploy:cert": "cdk deploy SparkedByCertStack --exclusively",
+    "deploy:cert:us-east-1": "AWS_REGION=us-east-1 cdk deploy SparkedByCertStack --exclusively",
+    "deploy:wildcard-cert": "AWS_REGION=us-east-1 cdk deploy SparkedByWildcardCertStack --exclusively",
+    "diff:wildcard-cert": "AWS_REGION=us-east-1 cdk diff SparkedByWildcardCertStack",
+    "deploy:landing": "cdk deploy SparkedByLandingStack --exclusively",
+    "deploy:all": "cd ../landing && npm run build && cd ../deploy && npm run deploy:cert:us-east-1 && npm run deploy:landing",
+    "diff": "cdk diff",
+    "diff:cert": "cdk diff SparkedByCertStack",
+    "diff:landing": "cdk diff SparkedByLandingStack",
+    "synth": "cdk synth",
+    "synth:cert": "cdk synth SparkedByCertStack",
+    "synth:landing": "cdk synth SparkedByLandingStack",
+    "deploy:client": "cd ../landing && npm run build && cd ../deploy && CLIENT_NAME=$CLIENT_NAME cdk deploy SparkedByClient*",
+    "deploy:client:dryrun": "CLIENT_NAME=$CLIENT_NAME cdk diff SparkedByClient*"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.124.0",
+    "constructs": "^10.3.0",
+    "dotenv": "^16.3.1",
+    "source-map-support": "^0.5.21",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.4",
+    "aws-cdk": "^2.124.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
