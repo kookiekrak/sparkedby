@@ -1,9 +1,9 @@
 {
  "Resources": {
-  "SparkedByWebsiteBucketDA40D721": {
+  "ClientLandingBucket76043F1E": {
    "Type": "AWS::S3::Bucket",
    "Properties": {
-    "BucketName": "sparkedby-app",
+    "BucketName": "friend-split-sparkedby-app",
     "PublicAccessBlockConfiguration": {
      "BlockPublicAcls": false,
      "BlockPublicPolicy": false,
@@ -16,7 +16,7 @@
       "Value": "true"
      },
      {
-      "Key": "aws-cdk:cr-owned:2c59eca2",
+      "Key": "aws-cdk:cr-owned:8c166ba9",
       "Value": "true"
      }
     ],
@@ -28,14 +28,14 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/SparkedByWebsiteBucket/Resource"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/ClientLandingBucket/Resource"
    }
   },
-  "SparkedByWebsiteBucketPolicy0653FA73": {
+  "ClientLandingBucketPolicyFC020572": {
    "Type": "AWS::S3::BucketPolicy",
    "Properties": {
     "Bucket": {
-     "Ref": "SparkedByWebsiteBucketDA40D721"
+     "Ref": "ClientLandingBucket76043F1E"
     },
     "PolicyDocument": {
      "Statement": [
@@ -51,7 +51,7 @@
          [
           {
            "Fn::GetAtt": [
-            "SparkedByWebsiteBucketDA40D721",
+            "ClientLandingBucket76043F1E",
             "Arn"
            ]
           },
@@ -79,7 +79,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "SparkedByWebsiteBucketDA40D721",
+          "ClientLandingBucket76043F1E",
           "Arn"
          ]
         },
@@ -89,7 +89,7 @@
           [
            {
             "Fn::GetAtt": [
-             "SparkedByWebsiteBucketDA40D721",
+             "ClientLandingBucket76043F1E",
              "Arn"
             ]
            },
@@ -104,10 +104,10 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/SparkedByWebsiteBucket/Policy/Resource"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/ClientLandingBucket/Policy/Resource"
    }
   },
-  "SparkedByWebsiteBucketAutoDeleteObjectsCustomResource41E216C4": {
+  "ClientLandingBucketAutoDeleteObjectsCustomResourceE2F4EFE8": {
    "Type": "Custom::S3AutoDeleteObjects",
    "Properties": {
     "ServiceToken": {
@@ -117,16 +117,16 @@
      ]
     },
     "BucketName": {
-     "Ref": "SparkedByWebsiteBucketDA40D721"
+     "Ref": "ClientLandingBucket76043F1E"
     }
    },
    "DependsOn": [
-    "SparkedByWebsiteBucketPolicy0653FA73"
+    "ClientLandingBucketPolicyFC020572"
    ],
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/SparkedByWebsiteBucket/AutoDeleteObjectsCustomResource/Default"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/ClientLandingBucket/AutoDeleteObjectsCustomResource/Default"
    }
   },
   "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
@@ -151,7 +151,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
    }
   },
   "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
@@ -177,7 +177,7 @@
       [
        "Lambda function for auto-deleting objects in ",
        {
-        "Ref": "SparkedByWebsiteBucketDA40D721"
+        "Ref": "ClientLandingBucket76043F1E"
        },
        " S3 bucket."
       ]
@@ -188,18 +188,17 @@
     "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
    ],
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
     "aws:asset:path": "asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6",
     "aws:asset:property": "Code"
    }
   },
-  "LandingPageDistribution44DA4B02": {
+  "ClientDistribution1EF1EDE2": {
    "Type": "AWS::CloudFront::Distribution",
    "Properties": {
     "DistributionConfig": {
      "Aliases": [
-      "sparkedby.app",
-      "www.sparkedby.app"
+      "friend-split.sparkedby.app"
      ],
      "CustomErrorResponses": [
       {
@@ -223,7 +222,7 @@
       ],
       "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
       "Compress": true,
-      "TargetOriginId": "SparkedByLandingStackLandingPageDistributionOrigin1CC25A2FA",
+      "TargetOriginId": "SparkedByClientFriendsplitStackClientDistributionOrigin1DC8F5252",
       "ViewerProtocolPolicy": "redirect-to-https"
      },
      "DefaultRootObject": "index.html",
@@ -246,7 +245,7 @@
            "/",
            {
             "Fn::GetAtt": [
-             "SparkedByWebsiteBucketDA40D721",
+             "ClientLandingBucket76043F1E",
              "WebsiteURL"
             ]
            }
@@ -254,20 +253,47 @@
          }
         ]
        },
-       "Id": "SparkedByLandingStackLandingPageDistributionOrigin1CC25A2FA",
-       "OriginPath": ""
+       "Id": "SparkedByClientFriendsplitStackClientDistributionOrigin1DC8F5252"
       }
      ],
      "PriceClass": "PriceClass_100",
      "ViewerCertificate": {
-      "AcmCertificateArn": "arn:aws:acm:us-east-1:302263086944:certificate/5455dc07-d24f-4dd9-98ff-08bcfdc8fade",
+      "AcmCertificateArn": "arn:aws:acm:us-east-1:302263086944:certificate/0893128a-ab57-440a-b133-3a663913c5c8",
       "MinimumProtocolVersion": "TLSv1.2_2021",
       "SslSupportMethod": "sni-only"
      }
     }
    },
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/LandingPageDistribution/Resource"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/ClientDistribution/Resource"
+   }
+  },
+  "SubdomainRecord3F37A9D4": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "ClientDistribution1EF1EDE2",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z03642041RUIUCIHW4W1W",
+    "Name": "friend-split.sparkedby.app.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/SubdomainRecord/Resource"
    }
   },
   "DeployLandingPageAwsCliLayer8C25292A": {
@@ -280,7 +306,7 @@
     "Description": "/opt/awscli/aws"
    },
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/DeployLandingPage/AwsCliLayer/Resource",
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/DeployLandingPage/AwsCliLayer/Resource",
     "aws:asset:path": "asset.8a84a8f465fbe0c48af2c256847ec9abfe095d23781b749728b998315f3ad732.zip",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Content"
@@ -302,11 +328,11 @@
      "672d7256a64e007cc847fb782055a1bc8e003e92c170b85e0e70aa4e4cc509d7.zip"
     ],
     "DestinationBucketName": {
-     "Ref": "SparkedByWebsiteBucketDA40D721"
+     "Ref": "ClientLandingBucket76043F1E"
     },
     "Prune": true,
     "DistributionId": {
-     "Ref": "LandingPageDistribution44DA4B02"
+     "Ref": "ClientDistribution1EF1EDE2"
     },
     "DistributionPaths": [
      "/*"
@@ -316,7 +342,7 @@
    "UpdateReplacePolicy": "Delete",
    "DeletionPolicy": "Delete",
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/DeployLandingPage/CustomResource/Default"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/DeployLandingPage/CustomResource/Default"
    }
   },
   "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265": {
@@ -350,7 +376,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/Resource"
    }
   },
   "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRoleDefaultPolicy88902FDF": {
@@ -387,7 +413,7 @@
        "Resource": [
         {
          "Fn::GetAtt": [
-          "SparkedByWebsiteBucketDA40D721",
+          "ClientLandingBucket76043F1E",
           "Arn"
          ]
         },
@@ -397,7 +423,7 @@
           [
            {
             "Fn::GetAtt": [
-             "SparkedByWebsiteBucketDA40D721",
+             "ClientLandingBucket76043F1E",
              "Arn"
             ]
            },
@@ -426,7 +452,7 @@
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/ServiceRole/DefaultPolicy/Resource"
    }
   },
   "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C81C01536": {
@@ -461,75 +487,19 @@
     "CustomCDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756CServiceRole89A01265"
    ],
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource",
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/Custom::CDKBucketDeployment8693BB64968944B69AAFB0CC9EB8756C/Resource",
     "aws:asset:path": "asset.9a1fcb4a7ecba81ad70e9d3fb241f6794497da945dae5f25924e4dd002b65f2d",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
   },
-  "ApexAliasRecordCCE6BE0E": {
-   "Type": "AWS::Route53::RecordSet",
-   "Properties": {
-    "AliasTarget": {
-     "DNSName": {
-      "Fn::GetAtt": [
-       "LandingPageDistribution44DA4B02",
-       "DomainName"
-      ]
-     },
-     "HostedZoneId": {
-      "Fn::FindInMap": [
-       "AWSCloudFrontPartitionHostedZoneIdMap",
-       {
-        "Ref": "AWS::Partition"
-       },
-       "zoneId"
-      ]
-     }
-    },
-    "HostedZoneId": "Z03642041RUIUCIHW4W1W",
-    "Name": "sparkedby.app.",
-    "Type": "A"
-   },
-   "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/ApexAliasRecord/Resource"
-   }
-  },
-  "WwwAliasRecord1B442697": {
-   "Type": "AWS::Route53::RecordSet",
-   "Properties": {
-    "AliasTarget": {
-     "DNSName": {
-      "Fn::GetAtt": [
-       "LandingPageDistribution44DA4B02",
-       "DomainName"
-      ]
-     },
-     "HostedZoneId": {
-      "Fn::FindInMap": [
-       "AWSCloudFrontPartitionHostedZoneIdMap",
-       {
-        "Ref": "AWS::Partition"
-       },
-       "zoneId"
-      ]
-     }
-    },
-    "HostedZoneId": "Z03642041RUIUCIHW4W1W",
-    "Name": "www.sparkedby.app.",
-    "Type": "A"
-   },
-   "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/WwwAliasRecord/Resource"
-   }
-  },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VQy27CMBD8Fu5my6MceoSgnloVEanXyDgbZHDsyLsmQpb/vXJCQ3uax67Hml3B8m0Di5nsaa7q69zoE8SSpbqKI5ILXqGQPVWR1hB3QV2RRdHYBxvh4IxW96f90KPYScIklHGhbryzDHGvib0+BdbO5kd/dRK0rmKNnXH3Fi3DGLKfDCGJkAm2GZIwsj3VEmLR2A95R/+NnnJsqe3ZIDv7HqwaPppI0UxmElq2EI/OYLYHfJYZWRLeBcbNGuL2iMr5elgdWImckigCsWunaw3TX/5vdPDupmv0+SRiKFCyPGt7ftSoTK5QyZ6U0bDtqTB6aJUzP2XX5dWisV+Bu8BJWFcjXOjltlrB8hUWswtpPffBsm4RjiP+AAVreT3hAQAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1VQS2/CMAz+LdyDx2McdoSinTYNUWnXKqQuCqRJFTtUKMp/n9Kysp2+h235s1ewfNvAYiZ7mqv6Ojf6BLFkqa7iiOSCVyhkT1WkNcRdUFdkUTT2wUY4OKPV/Wk/9Ch2kjAJZVyoG+8sQ9xrYq9PgbWzeeivTsK7wLhZQ9weUTlf546RlchJ0LqKNXbG3Vu0DOOO/WQISYRMsM2QhJHtqZYQi8Z+yDv6b/SUt5bang2ys+/BqiHHRIpmMpPQsoV4dAaHFBmft44sJVEEYtdO3xry/vJ/pYN3N12jzy8RQ8KS5Vnbc575lF2X6Ri5MjluJXtSRsO2p8Lo4YLc+hW4C5yEdTXChV5uqxUsX2Exu5DWcx8s6xbhOOIPQUgZkuEBAAA="
    },
    "Metadata": {
-    "aws:cdk:path": "SparkedByLandingStack/CDKMetadata/Default"
+    "aws:cdk:path": "SparkedByClientFriend-splitStack/CDKMetadata/Default"
    }
   }
  },
@@ -544,16 +514,12 @@
   }
  },
  "Outputs": {
-  "ApexSiteUrl": {
-   "Description": "URL for the SparkedBy landing page (apex domain)",
-   "Value": "https://sparkedby.app"
-  },
-  "WwwSiteUrl": {
-   "Description": "URL for the SparkedBy landing page (www)",
-   "Value": "https://www.sparkedby.app"
+  "SubdomainUrl": {
+   "Description": "URL for the friend-split landing page",
+   "Value": "https://friend-split.sparkedby.app"
   },
   "CloudFrontUrl": {
-   "Description": "CloudFront URL for the SparkedBy landing page",
+   "Description": "CloudFront URL for the friend-split landing page",
    "Value": {
     "Fn::Join": [
      "",
@@ -561,13 +527,17 @@
       "https://",
       {
        "Fn::GetAtt": [
-        "LandingPageDistribution44DA4B02",
+        "ClientDistribution1EF1EDE2",
         "DomainName"
        ]
       }
      ]
     ]
    }
+  },
+  "BucketName": {
+   "Description": "S3 bucket for the friend-split landing page",
+   "Value": "friend-split-sparkedby-app"
   }
  },
  "Parameters": {

@@ -1,29 +1,25 @@
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, DollarSign } from 'lucide-react';
 
 /**
- * Navbar Component
+ * Navbar Component for FriendSplit
  * 
- * A simple navigation bar that can be customized with your brand colors and links.
- * 
- * Configuration:
- * - Set VITE_COMPANY_NAME in .env file to customize the company name
- * - Set VITE_PRIMARY_COLOR and VITE_SECONDARY_COLOR for color scheme
+ * A fun, friendly navigation bar for the expense sharing app.
  */
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-white/90 backdrop-blur-sm fixed w-full z-50 shadow-sm">
+    <nav className="bg-teal-50/90 backdrop-blur-sm fixed w-full z-50 shadow-sm border-b-2 border-teal-300">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo/Brand Name */}
         <div className="flex items-center">
-          <span 
-            className="text-2xl font-bold bg-clip-text text-transparent"
-            style={{ background: `linear-gradient(to right, ${import.meta.env.VITE_PRIMARY_COLOR || '#3b82f6'}, ${import.meta.env.VITE_SECONDARY_COLOR || '#a855f7'})` }}
-          >
-            {import.meta.env.VITE_COMPANY_NAME || 'Your Brand'}
-          </span>
+          <div className="flex items-center gap-2">  
+            <DollarSign className="h-7 w-7 text-teal-500" />
+            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-500 to-emerald-600">
+              FriendSplit
+            </span>
+          </div>
         </div>
 
         {/* Desktop Navigation */}

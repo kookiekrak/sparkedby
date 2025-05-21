@@ -1,16 +1,12 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState } from 'react';
+import type { FormEvent, ChangeEvent } from 'react';
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 /**
- * WaitlistForm Component
+ * WaitlistForm Component for FriendSplit
  * 
- * A simple email collection form that can be used to gather early user interest.
- * 
- * Configuration:
- * - Set VITE_API_URL in .env file to configure the API endpoint
- * - Set VITE_COMPANY_NAME to customize success message
- * - Set VITE_PRIMARY_COLOR and VITE_SECONDARY_COLOR for styling
+ * A fun, friendly email collection form for the expense sharing app.
  */
 const WaitlistForm = () => {
   const [email, setEmail] = useState('');
@@ -65,14 +61,14 @@ const WaitlistForm = () => {
           type="email"
           value={email}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-          placeholder="Your email address"
-          className="w-full px-4 py-3 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          placeholder="Enter your email for early access"
+          className="w-full px-4 py-3 rounded-full border border-teal-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white/90"
           disabled={status === 'submitting' || status === 'success'}
         />
         <button
           type="submit"
           disabled={status === 'submitting' || status === 'success'}
-          className="absolute right-1 top-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 font-medium disabled:opacity-70"
+          className="absolute right-1 top-1 bg-gradient-to-r from-teal-500 to-emerald-500 text-white px-4 py-2 rounded-full hover:shadow-lg transition-all duration-300 font-medium disabled:opacity-70"
         >
           {status === 'submitting' ? (
             <span className="flex items-center">
@@ -83,7 +79,7 @@ const WaitlistForm = () => {
               Creating...
             </span>
           ) : (
-            'Sign Up'
+            'Join Waitlist'
           )}
         </button>
       </form>
@@ -93,9 +89,9 @@ const WaitlistForm = () => {
       )}
       
       {status === 'success' && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md mt-3 animate-fade-in">
+        <div className="bg-teal-50 border border-teal-200 text-teal-700 px-4 py-3 rounded-md mt-3 animate-fade-in">
           <p className="text-sm font-medium">
-            Thanks for joining our waitlist! We'll keep you updated on our progress.
+            Thanks for joining the FriendSplit waitlist! 🎉 We'll notify you as soon as you can start splitting bills with your friends.
           </p>
         </div>
       )}

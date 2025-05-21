@@ -3,6 +3,7 @@
 const cdk = require('aws-cdk-lib');
 const { SparkedByLandingStack } = require('./lib/landing-stack');
 const { SubdomainLandingStack } = require('./lib/subdomain-landing-stack');
+const { WildcardLandingStack } = require('./lib/wildcard-landing-stack');
 const { CertificateStack } = require('./lib/certificate-stack');
 
 // Common configuration
@@ -55,8 +56,30 @@ new SparkedByLandingStack(app, 'SparkedByLandingStack', {
   }
 });
 
-// Create a client-specific landing page stack if clientName is provided
-if (clientName) {
+// Use either the legacy approach (one CloudFront per client) or the new wildcard approach
+const useWildcardArchitecture = true; // Set to true to use the new faster architecture
+
+// Create the wildcard distribution for all client subdomains
+if (useWildcardArchitecture) {
+  new WildcardLandingStack(app, 'SparkedByWildcardLandingStack', {
+    env: { 
+      account: process.env.CDK_DEFAULT_ACCOUNT, 
+      region: process.env.CDK_DEFAULT_REGION || 'us-east-1' // Must be in us-east-1 for the certificate
+    },
+    certificateArn: wildcardCertificateArn,
+    hostedZoneId: hostedZoneId,
+    domainName: domainName,
+    tags: {
+      Project: 'SparkedBy',
+      Environment: 'Production',
+    }
+  });
+  
+  console.log(`Creating wildcard distribution for *.${domainName}`);
+  console.log('After deployment, new client sites can be deployed immediately without waiting for CloudFront provisioning');
+}
+// Legacy approach: Create a client-specific landing page stack if clientName is provided
+else if (clientName) {
   const clientStackId = `SparkedByClient${clientName.charAt(0).toUpperCase() + clientName.slice(1)}Stack`;
   
   new SubdomainLandingStack(app, clientStackId, {

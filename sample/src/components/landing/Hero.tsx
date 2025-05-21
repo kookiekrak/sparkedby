@@ -26,13 +26,13 @@ const Hero = () => {
           {/* Text content */}
           <div className="flex-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">
-              Validate Your 
-              <span className="bg-clip-text text-transparent" style={{ background: `linear-gradient(to right, ${import.meta.env.VITE_PRIMARY_COLOR || '#3b82f6'}, ${import.meta.env.VITE_SECONDARY_COLOR || '#a855f7'})` }}> Business Ideas </span>
-              in Minutes
+              Your Compelling
+              <span className="bg-clip-text text-transparent" style={{ background: `linear-gradient(to right, ${import.meta.env.VITE_PRIMARY_COLOR || '#3b82f6'}, ${import.meta.env.VITE_SECONDARY_COLOR || '#a855f7'})` }}> Headline </span>
+              Goes Here
             </h1>
             
             <p className="text-xl text-gray-700 mb-8 animate-fade-in opacity-0 animation-delay-200">
-              {import.meta.env.VITE_COMPANY_NAME || 'SparkedBy'} {import.meta.env.VITE_TAGLINE || 'generates beautiful landing pages instantly to help you collect signups and validate your ideas without building a full product.'}
+              {import.meta.env.VITE_COMPANY_NAME || 'Your Brand'} {import.meta.env.VITE_TAGLINE || 'helps you create great products and services. This is where you explain your value proposition in a concise and compelling way.'}
             </p>
             
             <div className="mb-8 animate-fade-in opacity-0 animation-delay-400">
@@ -44,19 +44,19 @@ const Hero = () => {
                 <svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                 </svg>
-                <span className="text-gray-700">No coding required</span>
+                <span className="text-gray-700">Feature Point 1</span>
               </div>
               <div className="flex items-center">
                 <svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                 </svg>
-                <span className="text-gray-700">Ready in 5 minutes</span>
+                <span className="text-gray-700">Feature Point 2</span>
               </div>
               <div className="flex items-center">
                 <svg className="w-5 h-5 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd"></path>
                 </svg>
-                <span className="text-gray-700">Data-driven insights</span>
+                <span className="text-gray-700">Feature Point 3</span>
               </div>
             </div>
           </div>

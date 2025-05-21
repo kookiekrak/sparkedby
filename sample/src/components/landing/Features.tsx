@@ -8,17 +8,28 @@ import {
   Smartphone 
 } from 'lucide-react';
 
+/**
+ * Features Component
+ * 
+ * Displays a grid of product or service features.
+ * 
+ * Configuration:
+ * - Customize the features array to highlight your product's benefits
+ * - Set VITE_PRIMARY_COLOR and VITE_SECONDARY_COLOR for styling
+ */
+
 interface FeatureCardProps {
   icon: React.ReactNode;
   title: string;
   description: string;
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => {
+const FeatureCard = ({ icon, title, description }: FeatureCardProps) => {
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 animate-fade-in opacity-0">
-      <div className="w-12 h-12 bg-gradient-to-br from-blue-100 to-purple-100 rounded-lg flex items-center justify-center mb-4">
-        <div className="text-blue-600">
+      <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4" 
+           style={{ background: `linear-gradient(to bottom right, ${import.meta.env.VITE_PRIMARY_COLOR || '#3b82f6'}20, ${import.meta.env.VITE_SECONDARY_COLOR || '#a855f7'}20)` }}>
+        <div style={{ color: import.meta.env.VITE_PRIMARY_COLOR || '#3b82f6' }}>
           {icon}
         </div>
       </div>
@@ -28,27 +39,27 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
   );
 };
 
-const Features: React.FC = () => {
+const Features = () => {
   const features = [
     {
       icon: <Zap size={24} />,
-      title: "Instant Page Generation",
-      description: "Create beautiful, conversion-optimized landing pages in minutes with our intuitive page builder — no coding required."
+      title: "Feature One",
+      description: "Describe a key feature of your product or service here. Focus on the benefits it provides to your users."
     },
     {
       icon: <BarChart3 size={24} />,
-      title: "Signup Analytics",
-      description: "Track visitor behavior and signup conversions with real-time analytics to validate your business idea before building."
+      title: "Feature Two",
+      description: "Highlight another important feature here. Explain how it solves a problem or adds value for your customers."
     },
     {
       icon: <Shield size={24} />,
-      title: "Custom Domains",
-      description: "Connect your own domain or use our free subdomain to create a professional online presence for your idea."
+      title: "Feature Three",
+      description: "Showcase a third feature that makes your offering unique. What separates you from the competition?"
     },
     {
       icon: <Users size={24} />,
-      title: "Audience Insights",
-      description: "Collect and analyze user feedback directly through your landing page to refine your value proposition."
+      title: "Feature Four",
+      description: "Add details about another key benefit or feature that will resonate with your target audience."
     },
     {
       icon: <Layers size={24} />,
